@@ -1,3 +1,4 @@
+@import 'src/styles';
 $primary-color: #1A6634;
 $secondary-color: #808c99;
 $background-color: #f3f4f6;
@@ -13,11 +14,12 @@ $background-color: #f3f4f6;
   padding: 8px 16px;
   background-color: $background-color;
   border-radius: 4px;
-  font-family: Arial, sans-serif;
+  font-family: $primary-font;
   font-size: 13px;
 
   .breadcrumb-item {
     color: $secondary-color;
+    font-weight: bold;
 
     &.active {
       color: $primary-color;
@@ -41,6 +43,7 @@ $background-color: #f3f4f6;
     padding: 10px 14px;
     font-size: 12px;
     cursor: pointer;
+    font-family: $primary-font;
 
     .icon-power {
       margin-right: 6px;

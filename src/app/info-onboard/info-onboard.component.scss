@@ -1,0 +1,108 @@
+$primary-color: #2d9c5c;
+$secondary-color: #959DB3;
+$link-color: #0d99ff;
+$font-bold: #000;
+$primary-font: "Mulish", sans-serif;
+
+.section-title {
+  margin: 0 0 10px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: $primary-font;
+  color: $font-bold;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.info-onboard {
+  margin: 20px 10px 0 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 16px;
+  font-family: $primary-font;
+
+  .onboarding-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr;
+    gap: 20px;
+
+    .employee-info {
+      text-align: center;
+
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #ddd;
+      }
+
+      .employee-name {
+        margin: 8px 0 4px 0;
+        font-weight: bold;
+        font-size: 13px;
+      }
+
+      .employee-id {
+        margin: -3px;
+        font-size: 13px;
+      }
+    }
+
+    .column {
+      display: grid;
+      grid-template-columns: max-content 1fr; 
+      row-gap: 10px; 
+      column-gap: 10px;
+
+      .row {
+        display: contents;
+      }
+
+      .label {
+        color: $secondary-color;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      span {
+        color: $font-bold;
+        text-align: left;
+        margin-left: 5px; // Khoảng cách 5px giữa strong và span
+      }
+
+      .bold-text {
+        font-weight: bold;
+      }
+
+      .status {
+        color: $link-color;
+      }
+
+      a.decision-link {
+        color: $link-color;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .empty-row {
+        visibility: hidden; 
+        height: 0;
+      }
+    }
+  }
+
+  .longest-text {
+    width: 150px;
+    display: inline-block;
+  }
+
+  .longest-text + span {
+    margin-left: 10px;
+  }
+}
