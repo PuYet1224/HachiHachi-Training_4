@@ -1,0 +1,50 @@
+<div id="sidebar-container">
+  <div class="icon-container">
+    <img src="../../assets/HachiLogo.svg" alt="" />
+    <img src="../../assets/chevron-up-solid.svg"
+         alt=""
+         style="cursor: pointer;"
+         [style.transform]="isEvaluationOpen ? 'rotate(0deg)' : 'rotate(180deg)'"
+         (click)="toggleEvaluation()"/>
+  </div>
+  
+  <div class="topic">
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>CƠ CẤU TỔ CHỨC</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>HỒ SƠ NHÂN SỰ</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>CHÍNH SÁCH</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen"
+         [class.open]="isQuestionBankOpen"
+         (click)="toggleQuestionBank()">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>ĐÁNH GIÁ NHÂN SỰ</h1>
+    </div>
+
+    <ul class="question"
+        *ngIf="isEvaluationOpen && isQuestionBankOpen"
+        [class.selected]="isQuestionBankSelected"
+        (click)="selectQuestionBank()">
+      <div></div>
+      <li>Ngân hàng câu hỏi</li>
+    </ul>
+  </div>
+</div>

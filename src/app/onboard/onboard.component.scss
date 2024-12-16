@@ -1,0 +1,57 @@
+$primary-color: #1A6634;
+$secondary-color: #808c99;
+$background-color: #f3f4f6;
+
+.app-onboard {
+    padding: 4px; 
+    background-color: $background-color
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: $background-color;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+
+  .breadcrumb-item {
+    color: $secondary-color;
+
+    &.active {
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+
+  .breadcrumb-divider {
+    margin: 0 8px;
+    color: $secondary-color;
+  }
+
+  .offboarding-btn {
+    margin-left: auto;
+    background-color: $primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 12px;
+    cursor: pointer;
+
+    .icon-power {
+      margin-right: 6px;
+      &::before {
+        content: "\21BB";
+        font-weight: bold;
+      }
+    }
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}
