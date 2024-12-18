@@ -11,7 +11,7 @@ $background-color: #f3f4f6;
 .breadcrumb {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 8px 10px;
   background-color: $background-color;
   border-radius: 4px;
   font-family: $primary-font;
@@ -19,11 +19,11 @@ $background-color: #f3f4f6;
 
   .breadcrumb-item {
     color: $secondary-color;
-    font-weight: bold;
+    font-weight: 600;
 
     &.active {
       color: $primary-color;
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 
@@ -39,11 +39,14 @@ $background-color: #f3f4f6;
     display: flex;
     align-items: center;
     border: none;
-    border-radius: 4px;
-    padding: 10px 14px;
-    font-size: 12px;
+    border-radius: 2px;
+    padding: 18px 8px;
+    font-size: 13px;
     cursor: pointer;
     font-family: $primary-font;
+    font-weight: 600;
+    height: 32px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
 
     .icon-power {
       margin-right: 6px;
@@ -54,7 +57,7 @@ $background-color: #f3f4f6;
     }
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: #155d2d;
     }
   }
 }

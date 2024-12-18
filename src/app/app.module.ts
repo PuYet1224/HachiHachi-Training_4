@@ -9,6 +9,8 @@ import { InfoOnboardComponent } from './info-onboard/info-onboard.component';
 import { JobOverviewComponent } from './job-overview/job-overview.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { Header1Component } from './header1/header1.component';
+import { TableListComponent } from './table-list/table-list.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { Header1Component } from './header1/header1.component';
     InfoOnboardComponent,
     JobOverviewComponent,
     SearchBarComponent,
-    Header1Component
+    Header1Component,
+    TableListComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
