@@ -1,4 +1,3 @@
-<!-- src/app/table-list/table-list.component.html -->
 <div class="table-container">
   <div class="table-list">
     <table>
@@ -90,12 +89,19 @@
           <td>{{ job.PositionApprovedName }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
-          <td>{{ getStatus(job.Status) }}</td>
+          <td [style.color]="job.Status | statusColor">{{ getStatus(job.Status) }}</td>
           <td>
             <img src="../../assets/ban.png" alt="Ban" class="ban-icon" />
           </td>
           <td>
-            <img src="../../assets/three-dots.png" alt="Actions" class="three-dots" />
+            <img src="../../assets/three-dots.png" alt="Actions" class="three-dots" (click)="toggleActionMenu(job)" />
+            <div class="action-menu" *ngIf="job.actionMenuVisible">
+              <ul>
+                <li *ngFor="let action of getActions(job.Status)" (click)="performAction(action, job)">
+                  {{ action }}
+                </li>
+              </ul>
+            </div>
           </td>
         </tr>
         <tr *ngIf="displayedJobs.length === 0">

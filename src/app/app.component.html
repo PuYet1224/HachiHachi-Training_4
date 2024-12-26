@@ -4,5 +4,9 @@
   <app-onboard></app-onboard>
   <app-job-overview></app-job-overview>
   <app-search-bar (searchQuery)="onSearchQuery($event)"></app-search-bar>
-  <app-table-list [searchTerm]="searchTerm"></app-table-list>
+  <div class="table-switch">
+    <button (click)="switchTable('pre-offboard')" [class.active]="currentTable === 'pre-offboard'">Pre-Offboard</button>
+    <button (click)="switchTable('offboarding')" [class.active]="currentTable === 'offboarding'">Offboarding</button>
+  </div>
+  <app-table-list [searchTerm]="searchTerm" [tableType]="currentTable"></app-table-list>
 </div>

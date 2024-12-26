@@ -1,3 +1,4 @@
+/* src/app/table-list/table-list.component.scss */
 @import "src/styles";
 $primary-color: #5A6276;
 
@@ -25,7 +26,7 @@ $primary-color: #5A6276;
 
 .table-list {
   table {
-    width: calc(100vw - 245px);
+    width: 100%;
     margin: 0 auto;
     font-family: $primary-font;
     font-size: 13px;
@@ -117,9 +118,35 @@ $primary-color: #5A6276;
         &:nth-of-type(10) {
           border-left: 1px solid #bdc2d2;
           width: 35px;
+          position: relative;
           .three-dots {
             cursor: pointer;
             width: 16px;
+          }
+          .action-menu {
+            position: absolute;
+            top: 20px;
+            right: 0;
+            background: #bdc2d2;
+            border-radius: 4px;
+            overflow: hidden;
+            ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              li {
+                padding: 4px 6px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                color: #000;
+                background: #e1e1e1;
+                &:hover {
+                  background: #c0c0c0;
+                }
+              }
+            }
           }
         }
       }
@@ -169,10 +196,10 @@ $primary-color: #5A6276;
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      color: #fff;
+      color: #000;
+      background: #e1e1e1;
       &:hover {
-        background: #e1e1e1;
-        color: #000;
+        background: #c0c0c0;
       }
     }
   }
