@@ -14,11 +14,9 @@
   font-family: $primary-font;
   box-sizing: border-box;
   font-weight: 600;
-
   &:hover {
     background-color: #155d2d;
   }
-
   .button-icon, .plus-icon {
     width: 16px;
     height: 16px;
@@ -35,7 +33,6 @@
   width: 100%;
   padding: 12px 24px;
   box-sizing: border-box;
-
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
@@ -48,7 +45,6 @@
   font-size: 13px;
   margin: 0;
   flex-shrink: 0;
-
   @media (max-width: 768px) {
     margin-bottom: 12px;
     text-align: center;
@@ -61,17 +57,14 @@
   gap: 12px;
   flex-grow: 1;
   margin-left: 24px;
-
   &.left-t {
     @media (max-width: 768px) {
       flex-direction: column;
       margin-left: 0;
     }
   }
-
   &.right-t {
     justify-content: flex-end;
-
     @media (max-width: 768px) {
       margin-left: 0;
     }
@@ -88,25 +81,21 @@
   background-color: #fff;
   padding: 3px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
-
   @media (max-width: 768px) {
     width: 100%;
   }
-
   .input-icon {
     width: 25px;
     height: 29px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     img {
       width: 13px;
       height: 13px;
       filter: grayscale(100%) brightness(0.7);
     }
   }
-
   .search-input {
     flex-grow: 1;
     padding: 4px 8px;
@@ -116,7 +105,6 @@
     outline: none;
     height: 100%;
     color: #a1a1a1;
-
     &::placeholder {
       color: #a1a1a1;
     }
@@ -128,7 +116,6 @@
   height: 29px;
   padding: 18px 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
-
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;
@@ -141,8 +128,6 @@
   height: 29px;
   padding: 18px 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
-
-
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;

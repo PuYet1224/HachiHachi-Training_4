@@ -1,8 +1,8 @@
 <app-sidebar></app-sidebar>
 <div>
-    <app-header1></app-header1>
-    <app-onboard></app-onboard>
-    <app-job-overview></app-job-overview>
-    <app-search-bar></app-search-bar>
-    <app-table-list></app-table-list>
+  <app-header1></app-header1>
+  <app-onboard></app-onboard>
+  <app-job-overview></app-job-overview>
+  <app-search-bar (searchQuery)="onSearchQuery($event)"></app-search-bar>
+  <app-table-list [searchTerm]="searchTerm"></app-table-list>
 </div>
