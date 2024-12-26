@@ -67,7 +67,7 @@
   }
 
   &.open {
-    background: #1A2334;
+    background: #474F63;
     div {
       background: #fff;
     }
@@ -89,7 +89,7 @@
   align-items: center;
   list-style: none;
   color: #ccc;
-  background: #1a2334;
+  background: #474F63;
   cursor: pointer;
 
   img {
@@ -100,7 +100,7 @@
   }
 
   &.selected {
-    background: #1A2334;
+    background: #474F63;
     color: #fff;
     font-weight: bold;
   }

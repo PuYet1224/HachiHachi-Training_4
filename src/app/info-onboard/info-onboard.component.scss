@@ -1,4 +1,5 @@
 @import 'src/styles';
+<<<<<<< HEAD
 
 .user-info {
     display: flex;
@@ -6,18 +7,35 @@
     width: calc(100vw - 245px);
     margin: 0 auto;
   }
+=======
+$primary-color: #0d99ff;
+$secondary-color: #959DB3;
+
+.info-onboard {
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw - 245px);
+  margin: 0 auto;
+
+>>>>>>> f6018e304c9fda60ad86b4b416053669db3205e2
   h3 {
     font-family: $primary-font;
     font-size: 13px;
     color: #26282e;
   }
+<<<<<<< HEAD
   .user-content{
+=======
+
+  .user-content {
+>>>>>>> f6018e304c9fda60ad86b4b416053669db3205e2
     background: #fff;
     display: flex;
     align-items: start;
     justify-content: space-around;
     white-space: nowrap;
     text-overflow: ellipsis;
+<<<<<<< HEAD
     padding: 13px 0;
     font-size: 13px;
     font-family:"Mulish", serif;
@@ -47,3 +65,62 @@
     color: #959DB3;
     font-weight: bold;
   }
+=======
+    padding: 15px;
+    font-size: 13px;
+    font-family: $primary-font;
+    line-height: 1.5;
+
+    .user-col-1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        width: 50px;
+        height: 47px;
+        border-radius: 99px;
+        margin-bottom: 3px;
+      }
+    }
+
+    .user-col {
+      display: flex;
+      gap: 4px;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        &:first-child span {
+          color: $secondary-color;
+          font-weight: bold;
+        }
+
+        span {
+          display: flex;
+          align-items: center;
+
+          .colon {
+            color: $secondary-color;
+            margin-right: 2px;
+          }
+
+          &.primary-color {
+            color: $primary-color;
+          }
+
+          &.bold-text {
+            font-weight: bold;
+          }
+        }
+
+        i {
+          color: #000;
+        }
+      }
+    }
+  }
+}
+>>>>>>> f6018e304c9fda60ad86b4b416053669db3205e2

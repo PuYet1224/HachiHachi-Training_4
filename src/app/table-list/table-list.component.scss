@@ -1,0 +1,204 @@
+@import "src/styles";
+$primary-color: #5A6276;
+
+.main-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.table-container {
+  height: calc(100vh - 300px);
+  width: calc(100vw - 245px);
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 93px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #1A6634;
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #e0e0e0;
+  }
+}
+
+
+.table-list {
+  table {
+    width: calc(100vw - 245px);
+    margin: 0 auto;
+    font-family: $primary-font;
+    font-size: 13px;
+    border-spacing: 0 10px;
+    border-collapse: separate;
+    text-overflow: ellipsis;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    thead tr th,
+    tbody tr td {
+      padding: 6px 10px;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    thead tr th {
+      background: #EDEFF3;
+      color: #5A6276;
+      height: 50px;
+      text-align: left;
+
+      &:nth-of-type(6),
+      &:nth-of-type(7),
+      &:nth-of-type(1) {
+        text-align: center;
+      }
+
+      &:nth-of-type(8) {
+        text-align: right;
+      }
+
+      .sort-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 13px;
+      }
+    }
+
+    tbody tr {
+      height: 50px;
+      background: #fff;
+
+      &:hover {
+        background: rgba(26, 102, 52, 0.7);
+      }
+
+      td {
+        &:nth-of-type(2),
+        &:nth-of-type(3),
+        &:nth-of-type(5),
+        &:nth-of-type(4) {
+          text-align: left;
+        }
+
+        &:nth-of-type(6),
+        &:nth-of-type(7),
+        &:nth-of-type(10),
+        &:nth-of-type(1) {
+          text-align: center;
+        }
+
+        &:nth-of-type(8) {
+          text-align: right;
+        }
+        &:nth-of-type(9){
+          cursor: pointer;
+          text-align: center;
+        }
+        &:nth-of-type(1) {
+          width: 60px;
+        }
+
+        &:nth-of-type(10) {
+          border-left: 1px solid #bdc2d2;
+          width: 35px;
+          .three-dots {
+            cursor: pointer;
+            width: 16px;
+          }
+        }
+
+        .ban-icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+.job-name {
+  font-weight: bold;
+  font-size: 13px;
+  color: #0D99FF;
+}
+
+.details {
+  font-size: 13px;
+  color: #959DB3;
+}
+
+.content-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-data {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  height: 50px;
+}
+
+.action-menu {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background: #bdc2d2;
+  border-radius: 4px;
+  overflow: hidden;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      padding: 4px 6px; 
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: #fff;
+      &:hover {
+        background: #e1e1e1;
+        color: #000;
+      }
+    }
+  }
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 1px solid #959db3;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #1A6634;
+  border-color: #1A6634;
+}
+
+input[type="checkbox"]:checked::before {
+  position: absolute;
+  top: 0px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.three-dots {
+  width: 12px;
+}
