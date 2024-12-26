@@ -1,11 +1,12 @@
 <div class="app-onboard">
-    <div class="breadcrumb">
-      <span class="breadcrumb-item active">OFFBOARDING</span>
-      <span class="breadcrumb-divider">></span>
-      <span class="breadcrumb-item">CHUẨN BỊ OFFBOARDING</span>
-      <button class="offboarding-btn">
-        <span class="icon-power"></span> OFFBOARDING
-      </button>
-    </div>
+  <div class="breadcrumb">
+    <span class="breadcrumb-item active">OFFBOARDING</span>
+    <span class="breadcrumb-divider">></span>
+    <span class="breadcrumb-item">CHUẨN BỊ OFFBOARDING</span>
+    <button class="offboarding-btn" (click)="onOffboardingClick()">
+      <span class="icon-power"></span> OFFBOARDING
+    </button>
   </div>
-  
+</div>
+
+<app-info-onboard [isOnboarding]="isOnboarding"></app-info-onboard>

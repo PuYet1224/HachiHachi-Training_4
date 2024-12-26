@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./onboard.component.scss']
 })
 export class OnboardComponent {
+  isOnboarding = false;
 
+  onOffboardingClick() {
+    this.isOnboarding = true;
+  }
 }
