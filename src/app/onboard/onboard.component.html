@@ -1,10 +1,10 @@
 <div class="app-onboard">
   <div class="breadcrumb">
-    <span class="breadcrumb-item active">OFFBOARDING</span>
+    <span class="breadcrumb-item active">ONBOARDING</span>
     <span class="breadcrumb-divider">></span>
-    <span class="breadcrumb-item">CHUẨN BỊ OFFBOARDING</span>
-    <button class="offboarding-btn" (click)="onOffboardingClick()">
-      <span class="icon-power"></span> OFFBOARDING
+    <span class="breadcrumb-item">{{ isOnboarding ? 'ONBOARDING' : 'CHUẨN BỊ ONBOARDING' }}</span>
+    <button class="onboarding-btn" (click)="onToggleClick()">
+      <span class="icon-power"></span> {{ isOnboarding ? 'ONBOARDED' : 'ONBOARDING' }}
     </button>
   </div>
 </div>

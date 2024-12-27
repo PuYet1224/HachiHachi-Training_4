@@ -1,3 +1,4 @@
+/* src/app/onboard/onboard.component.scss */
 @import 'src/styles';
 $primary-color: #1A6634;
 $secondary-color: #808c99;
@@ -32,7 +33,7 @@ $background-color: #f3f4f6;
     color: $secondary-color;
   }
 
-  .offboarding-btn {
+  .onboarding-btn {
     margin-left: auto;
     background-color: $primary-color;
     color: white;

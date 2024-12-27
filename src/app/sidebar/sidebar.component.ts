@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuService } from '../services/menu.service'; 
-
+import { MenuService } from '../services/menu.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -14,7 +13,7 @@ export class SidebarComponent {
   constructor(private menuService: MenuService) {} 
 
   toggleEvaluation() {
-    this.menuService.selectedMainMenu$.subscribe((menu) => {
+    this.menuService.selectedMainMenu$.subscribe((menu: string | null) => {
       if (menu !== 'nhanSu') {
         this.isEvaluationOpen = false;
         this.isQuestionBankOpen = false;

@@ -1,4 +1,3 @@
-// src/app/app.component.ts
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,14 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  title = '3PSolutions';
   searchTerm = '';
-  currentTable: 'pre-offboard' | 'offboarding' = 'pre-offboard';
+  currentTable: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
 
   onSearchQuery(term: string) {
     this.searchTerm = term;
   }
 
-  switchTable(table: 'pre-offboard' | 'offboarding') {
+  switchTable(table: 'pre-onboarding' | 'onboarding') {
     this.currentTable = table;
   }
 }

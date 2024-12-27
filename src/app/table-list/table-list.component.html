@@ -1,17 +1,49 @@
+<div *ngIf="selectedJobs.length > 0" class="action-bar">
+  <div class="action-buttons">
+    <div class="action-count">
+      <span>{{ selectedJobs.length }}</span>
+      <span>Đã chọn</span>
+    </div>
+    <button *ngIf="visibleButtons.showEdit" (click)="bulkEdit()">
+      <img src="../../assets/pencil.png" alt="" />
+      <span>Chỉnh sửa</span>
+    </button>
+    <button *ngIf="visibleButtons.showNoAction" (click)="bulkNoAction()">
+      <img src="../../assets/ban.png" alt="" />
+      <span>Không thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showDelete" class="delete-btn" (click)="checkAndOpenDeleteModal()">
+      <img src="../../assets/trash.png" alt="" />
+      <span>Xóa công việc</span>
+    </button>
+    <button *ngIf="visibleButtons.showView" (click)="bulkView()">
+      <img src="../../assets/eye.png" alt="" />
+      <span>Xem chi tiết</span>
+    </button>
+    <button *ngIf="visibleButtons.showReopen" (click)="bulkReopen()">
+      <img src="../../assets/circle_arrow.png" alt="" />
+      <span>Mở lại</span>
+    </button>
+    <button *ngIf="visibleButtons.showSubmit" (click)="bulkSubmit()">
+      <img src="../../assets/send.png" alt="" />
+      <span>Gửi duyệt</span>
+    </button>
+    <button (click)="closeActionBar()">
+      <img src="../../assets/close.png" alt="" />
+    </button>
+  </div>
+</div>
+
 <div class="table-container">
   <div class="table-list">
     <table>
       <thead>
         <tr>
           <th>
-            <input type="checkbox" />
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="allSelected" />
           </th>
-          <th>
-            Tên công việc
-          </th>
-          <th>
-            Mô tả
-          </th>
+          <th>Tên công việc</th>
+          <th>Mô tả</th>
           <th (click)="sortTable('AssigneeBy')">
             <div class="header-content">
               Thực hiện bởi
@@ -68,17 +100,22 @@
               />
             </div>
           </th>
-          <th>
-            Tình trạng
-          </th>
+          <th>Tình trạng</th>
           <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let job of displayedJobs">
+        <tr
+          *ngFor="let job of displayedJobs; let i = index"
+          [ngClass]="[getStatusClass(job.Status), isSelected(job) ? 'selected-row' : '']"
+        >
           <td>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              [checked]="isSelected(job)"
+              (change)="toggleSelectItem(job)"
+            />
           </td>
           <td>
             <p class="job-name">{{ job.TaskName }}</p>
@@ -89,15 +126,28 @@
           <td>{{ job.PositionApprovedName }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
-          <td [style.color]="job.Status | statusColor">{{ getStatus(job.Status) }}</td>
-          <td>
-            <img src="../../assets/ban.png" alt="Ban" class="ban-icon" />
+          <td [style.color]="job.Status | statusColor">
+            {{ jobStatusService.getStatus(job.Status) }}
           </td>
           <td>
-            <img src="../../assets/three-dots.png" alt="Actions" class="three-dots" (click)="toggleActionMenu(job)" />
-            <div class="action-menu" *ngIf="job.actionMenuVisible">
+            <ng-container *ngFor="let icon of jobIconService.getIcons(job.Status, tableType)">
+              <img [src]="icon" alt="Icon" class="status-icon" />
+            </ng-container>
+          </td>
+          <td class="action-cell">
+            <img
+              src="../../assets/three-dots.png"
+              alt="Actions"
+              class="actions"
+              (click)="toggleActionMenu(job, i)"
+            />
+            <div class="action-menu" *ngIf="activeActionMenuId === 'item-' + i + '-' + job.TaskName">
               <ul>
-                <li *ngFor="let action of getActions(job.Status)" (click)="performAction(action, job)">
+                <li
+                  *ngFor="let action of getActions(job.Status)"
+                  (click)="performAction(action, job)"
+                >
+                  <img [src]="getActionIcon(action)" />
                   {{ action }}
                 </li>
               </ul>
@@ -113,12 +163,34 @@
     </table>
   </div>
 </div>
+
 <app-footer
   [rowsPerPage]="rowsPerPage"
-  [rowCount]="filteredJobs.length" 
+  [rowCount]="filteredJobs.length"
   [currentPage]="currentPage"
   [disabled]="false"
   (pageChange)="onPageChange($event)"
   (itemsPerPageChange)="onItemsPerPageChange($event)"
 >
 </app-footer>
+
+<div *ngIf="isDeleteModalVisible" class="modal-overlay">
+  <div class="modal">
+    <h3 class="modal-title">
+      <i class="fa-solid fa-triangle-exclamation" style="color: #fd7676"></i>
+      <span>XÓA CÔNG VIỆC</span>
+    </h3>
+    <span>Bạn chắc chắn muốn xóa các mục đã chọn?</span>
+    <span class="content-text">{{ selectedJobsTitle }}</span>
+    <span class="warning-text">
+      Mục bị xóa sẽ <strong>KHÔNG</strong> thể khôi phục lại.
+    </span>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="closeDeleteModal()">KHÔNG XÓA</button>
+      <button class="delete-btn" (click)="confirmDelete()">
+        <i class="fa-regular fa-trash-can" style="color: #fff"></i>
+        <span>XÓA</span>
+      </button>
+    </div>
+  </div>
+</div>

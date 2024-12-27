@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-job-overview',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./job-overview.component.scss']
 })
 export class JobOverviewComponent {
-
+  @Input() disabled: boolean = false;
 }
