@@ -1,33 +1,35 @@
+<!-- table-list.component.html -->
 <div *ngIf="selectedJobs.length > 0" class="action-bar">
   <div class="action-buttons">
     <div class="action-count">
       <span>{{ selectedJobs.length }}</span>
       <span>Đã chọn</span>
     </div>
-    <button *ngIf="visibleButtons.showEdit" (click)="bulkEdit()">
-      <img src="../../assets/pencil.png" alt="" />
-      <span>Chỉnh sửa</span>
-    </button>
-    <button *ngIf="visibleButtons.showNoAction" (click)="bulkNoAction()">
+    <button *ngIf="visibleButtons.showNoAction && tableType === 'pre-onboarding'" (click)="bulkNoAction()">
       <img src="../../assets/ban.png" alt="" />
       <span>Không thực hiện</span>
     </button>
-    <button *ngIf="visibleButtons.showDelete" class="delete-btn" (click)="checkAndOpenDeleteModal()">
+    <button *ngIf="visibleButtons.showStopAction && tableType === 'onboarding'" (click)="bulkStopAction()"> 
+      <img src="../../assets/ban.png" alt="" />
+      <span>Ngưng thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showDelete && tableType === 'pre-onboarding'" class="delete-btn" (click)="bulkDelete()">
       <img src="../../assets/trash.png" alt="" />
       <span>Xóa công việc</span>
-    </button>
-    <button *ngIf="visibleButtons.showView" (click)="bulkView()">
-      <img src="../../assets/eye.png" alt="" />
-      <span>Xem chi tiết</span>
     </button>
     <button *ngIf="visibleButtons.showReopen" (click)="bulkReopen()">
       <img src="../../assets/circle_arrow.png" alt="" />
       <span>Mở lại</span>
     </button>
-    <button *ngIf="visibleButtons.showSubmit" (click)="bulkSubmit()">
+    <button *ngIf="visibleButtons.showSubmit && tableType === 'onboarding'" (click)="bulkSubmit()">
       <img src="../../assets/send.png" alt="" />
-      <span>Gửi duyệt</span>
+      <span>Duyệt</span>
     </button>
+    <button *ngIf="visibleButtons.showComplete && tableType === 'onboarding'" (click)="bulkComplete()">
+      <img src="../../assets/done.png" alt="" />
+      <span>Hoàn tất</span>
+    </button>
+    <img src="../../assets/partition.png" alt="" />
     <button (click)="closeActionBar()">
       <img src="../../assets/close.png" alt="" />
     </button>
@@ -40,7 +42,7 @@
       <thead>
         <tr>
           <th>
-            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="allSelected" />
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="allSelected" [disabled]="disabled" />
           </th>
           <th>Tên công việc</th>
           <th>Mô tả</th>
@@ -115,6 +117,7 @@
               type="checkbox"
               [checked]="isSelected(job)"
               (change)="toggleSelectItem(job)"
+              [disabled]="disabled"
             />
           </td>
           <td>
@@ -140,6 +143,7 @@
               alt="Actions"
               class="actions"
               (click)="toggleActionMenu(job, i)"
+              [class.disabled]="disabled"
             />
             <div class="action-menu" *ngIf="activeActionMenuId === 'item-' + i + '-' + job.TaskName">
               <ul>
@@ -147,7 +151,7 @@
                   *ngFor="let action of getActions(job.Status)"
                   (click)="performAction(action, job)"
                 >
-                  <img [src]="getActionIcon(action)" />
+                  <img [src]="jobIconService.getIconsByAction(action)" />
                   {{ action }}
                 </li>
               </ul>
@@ -161,36 +165,5 @@
         </tr>
       </tbody>
     </table>
-  </div>
-</div>
-
-<app-footer
-  [rowsPerPage]="rowsPerPage"
-  [rowCount]="filteredJobs.length"
-  [currentPage]="currentPage"
-  [disabled]="false"
-  (pageChange)="onPageChange($event)"
-  (itemsPerPageChange)="onItemsPerPageChange($event)"
->
-</app-footer>
-
-<div *ngIf="isDeleteModalVisible" class="modal-overlay">
-  <div class="modal">
-    <h3 class="modal-title">
-      <i class="fa-solid fa-triangle-exclamation" style="color: #fd7676"></i>
-      <span>XÓA CÔNG VIỆC</span>
-    </h3>
-    <span>Bạn chắc chắn muốn xóa các mục đã chọn?</span>
-    <span class="content-text">{{ selectedJobsTitle }}</span>
-    <span class="warning-text">
-      Mục bị xóa sẽ <strong>KHÔNG</strong> thể khôi phục lại.
-    </span>
-    <div class="modal-actions">
-      <button class="cancel-btn" (click)="closeDeleteModal()">KHÔNG XÓA</button>
-      <button class="delete-btn" (click)="confirmDelete()">
-        <i class="fa-regular fa-trash-can" style="color: #fff"></i>
-        <span>XÓA</span>
-      </button>
-    </div>
   </div>
 </div>

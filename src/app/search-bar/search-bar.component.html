@@ -1,4 +1,4 @@
-<div class="search-bar">
+<div class="search-bar" [class.disabled]="disabled">
   <h4 class="search-title">DANH SÁCH CÔNG VIỆC CẦN THỰC HIỆN</h4>
   <div class="search-actions left-t">
     <div class="input-wrapper">
@@ -11,15 +11,16 @@
         class="search-input"
         [(ngModel)]="searchTerm"
         (input)="onSearchChange()"
+        [disabled]="disabled"
       />
     </div>
-    <button class="search-btn" (click)="onSearchClick()">
+    <button class="search-btn" (click)="onSearchClick()" [disabled]="disabled">
       <img src="../../assets/glass.png" alt="Search Icon" class="button-icon" />
       Tìm
     </button>
   </div>
   <div class="search-actions right-t">
-    <button class="add-btn">
+    <button class="add-btn" [disabled]="disabled">
       <img src="../../assets/plus.png" alt="Plus Icon" class="button-icon" />
       THÊM MỚI
     </button>

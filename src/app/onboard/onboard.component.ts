@@ -11,6 +11,7 @@ export class OnboardComponent {
   isOnboarding: boolean = false;
 
   onToggleClick() {
+    if (this.disabled) return;
     this.isOnboarding = !this.isOnboarding;
     this.toggleOnboarding.emit(this.isOnboarding ? 'onboarding' : 'pre-onboarding');
   }

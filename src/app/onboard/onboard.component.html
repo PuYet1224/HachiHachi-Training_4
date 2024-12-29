@@ -1,12 +1,12 @@
-<div class="app-onboard">
+<div class="app-onboard" [class.disabled]="disabled">
   <div class="breadcrumb">
     <span class="breadcrumb-item active">ONBOARDING</span>
     <span class="breadcrumb-divider">></span>
     <span class="breadcrumb-item">{{ isOnboarding ? 'ONBOARDING' : 'CHUẨN BỊ ONBOARDING' }}</span>
-    <button class="onboarding-btn" (click)="onToggleClick()">
+    <button class="onboarding-btn" (click)="onToggleClick()" [disabled]="disabled">
       <span class="icon-power"></span> {{ isOnboarding ? 'ONBOARDED' : 'ONBOARDING' }}
     </button>
   </div>
 </div>
 
-<app-info-onboard [isOnboarding]="isOnboarding"></app-info-onboard>
+<app-info-onboard [isOnboarding]="isOnboarding" [disabled]="disabled"></app-info-onboard>

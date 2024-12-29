@@ -19,7 +19,9 @@ interface JobWithActionMenu extends JobNameDTO {
 export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() searchTerm: string = '';
   @Input() tableType: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
+  @Input() disabled: boolean = false;
   @Output() actionBarOpened = new EventEmitter<boolean>();
+  @Output() rowCountChange = new EventEmitter<number>();
 
   jobNames: JobWithActionMenu[] = [];
   filteredJobs: JobWithActionMenu[] = [];
@@ -80,6 +82,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
         .filter(job => this.tableType === 'pre-onboarding' ? [1, 2].includes(job.Status) : true);
     }
     this.currentPage = 1;
+    this.rowCountChange.emit(this.filteredJobs.length);
   }
 
   get displayedJobs(): JobWithActionMenu[] {
@@ -106,43 +109,26 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  getActionIcon(action: string): string {
-    switch (action) {
-      case 'Chỉnh sửa':
-        return '../../assets/pencil.png';
-      case 'Không thực hiện':
-        return '../../assets/ban.png';
-      case 'Xóa công việc':
-        return '../../assets/trash.png';
-      case 'Xem chi tiết':
-        return '../../assets/eye.png';
-      case 'Mở lại':
-        return '../../assets/circle_arrow.png';
-      case 'Gửi duyệt':
-        return '../../assets/send.png';
-      default:
-        return '';
-    }
-  }
-
   getActions(status: number): string[] {
     if (this.tableType === 'pre-onboarding') {
       if (status === 1) {
-        return ['Chỉnh sửa', 'Không thực hiện', 'Xóa công việc'];
+        return ['Không thực hiện', 'Xóa công việc'];
       }
-      return ['Xem chi tiết', 'Mở lại'];
+      if (status === 2) {
+        return ['Mở lại'];
+      }
+      return [];
     } else {
       switch (status) {
         case 1:
-          return ['Chỉnh sửa', 'Mở lại'];
+          return ['Ngưng thực hiện', 'Gửi duyệt'];
         case 2:
-          return ['Chỉnh sửa', 'Mở lại'];
-        case 3:
-          return ['Chỉnh sửa', 'Ngưng thực hiện', 'Gửi duyệt'];
-        case 4:
-          return ['Xem chi tiết'];
         case 5:
-          return ['Xem chi tiết', 'Duyệt'];
+          return ['Mở lại'];
+        case 3:
+          return ['Hoàn tất'];
+        case 4:
+          return [];
         default:
           return [];
       }
@@ -156,6 +142,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   performAction(action: string, job: JobWithActionMenu): void {
     this.toggleActionMenu(job, this.displayedJobs.indexOf(job));
+    // Implement action handling logic here
   }
 
   toggleSelectAll(event: any): void {
@@ -193,21 +180,32 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
         return 'status-completed';
       case 4:
         return 'status-stopped';
+      case 5:
+        return 'status-stopped';
       default:
         return '';
     }
   }
 
   get visibleButtons() {
-    const statuses = this.selectedJobs.map(j => j.Status);
-    return {
-      showEdit: statuses.some(s => s === 1),
-      showNoAction: statuses.some(s => s === 1),
-      showDelete: statuses.some(s => [1, 2, 3, 4, 5].includes(s)),
-      showView: statuses.some(s => s !== 1),
-      showReopen: statuses.some(s => s !== 1),
-      showSubmit: statuses.some(s => s === 3)
-    };
+    if (this.tableType === 'pre-onboarding') {
+      return {
+        showNoAction: this.selectedJobs.some(job => job.Status === 1),
+        showDelete: this.selectedJobs.some(job => job.Status === 1),
+        showReopen: this.selectedJobs.some(job => job.Status === 2),
+        showStopAction: false,
+        showSubmit: false
+      };
+    } else { // onboarding
+      return {
+        showNoAction: false,
+        showDelete: false,
+        showReopen: this.selectedJobs.some(job => job.Status === 2 || job.Status === 5),
+        showStopAction: this.selectedJobs.some(job => job.Status === 1),
+        showSubmit: this.selectedJobs.some(job => job.Status === 1 || job.Status === 3),
+        showComplete: this.selectedJobs.some(job => job.Status === 3)
+      };
+    }
   }
 
   checkAndOpenDeleteModal(): void {
@@ -240,10 +238,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     this.actionBarOpened.emit(false);
   }
 
-  bulkEdit(): void {
-    this.closeActionBar();
-  }
-
   bulkNoAction(): void {
     this.closeActionBar();
   }
@@ -252,15 +246,19 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     this.checkAndOpenDeleteModal();
   }
 
-  bulkView(): void {
-    this.closeActionBar();
-  }
-
   bulkReopen(): void {
     this.closeActionBar();
   }
 
+  bulkStopAction(): void {
+    this.closeActionBar();
+  }
+
   bulkSubmit(): void {
+    this.closeActionBar();
+  }
+
+  bulkComplete(): void {
     this.closeActionBar();
   }
 
