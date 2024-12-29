@@ -4,20 +4,30 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'statusColor'
 })
 export class StatusColorPipe implements PipeTransform {
-  transform(status: number): string {
-    switch (status) {
-      case 1:
-        return '#959DB3';
-      case 2:
-        return '#BD0100';
-      case 3:
-        return '#000000';
-      case 4:
-        return '#008000';
-      case 5:
-        return '#0D99FF';
-      default:
-        return '#000000';
+  transform(status: number, tableType: 'pre-onboarding' | 'onboarding'): string {
+    if (tableType === 'pre-onboarding') {
+      switch (status) {
+        case 1:
+        case 3:
+          return '#26282E';
+        default:
+          return '#26282E';
+      }
+    } else { 
+      switch (status) {
+        case 3:
+          return '#26282E';
+        case 6:
+          return '#0D99FF';
+        case 4:
+          return '#1A6634';
+        case 5:
+          return '#EB273A';
+        case 2:
+          return '#85797A';
+        default:
+          return '#26282E';
+      }
     }
   }
 }

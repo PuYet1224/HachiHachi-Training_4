@@ -26,6 +26,13 @@
       font-size: 13px;
       font-family: $primary-font;
       line-height: 1.5;
+      
+      .status-item {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
     }
 
     .task-status span {
@@ -34,5 +41,6 @@
 
     .number-color {
       color: #0d99ff !important;
+      cursor: pointer;
     }
 }

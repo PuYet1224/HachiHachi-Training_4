@@ -2,14 +2,20 @@
 <div>
   <app-header1></app-header1>
   <app-onboard [disabled]="isDisabled" (toggleOnboarding)="switchTable($event)"></app-onboard>
-  <app-job-overview [disabled]="isDisabled"></app-job-overview>
+  <app-job-overview
+    [disabled]="isDisabled"
+    [tableType]="currentTable"
+    (statusClicked)="onStatusClicked($event)"
+  ></app-job-overview>
   <app-search-bar [disabled]="isDisabled" (searchQuery)="onSearchQuery($event)"></app-search-bar>
-  <app-table-list 
-    [searchTerm]="searchTerm" 
-    [tableType]="currentTable" 
+  <app-table-list
+    [searchTerm]="searchTerm"
+    [tableType]="currentTable"
+    [sortStatusId]="currentSortStatusId"
     (actionBarOpened)="onActionBarOpened($event)"
-    (rowCountChange)="rowCount = $event">
-  </app-table-list>
+    (rowCountChange)="rowCount = $event"
+    (statusCounts)="onStatusCounts($event)"
+  ></app-table-list>
   <app-footer
     [rowsPerPage]="rowsPerPage"
     [rowCount]="rowCount"

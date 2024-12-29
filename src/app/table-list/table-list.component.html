@@ -1,4 +1,3 @@
-<!-- table-list.component.html -->
 <div *ngIf="selectedJobs.length > 0" class="action-bar">
   <div class="action-buttons">
     <div class="action-count">
@@ -9,7 +8,7 @@
       <img src="../../assets/ban.png" alt="" />
       <span>Không thực hiện</span>
     </button>
-    <button *ngIf="visibleButtons.showStopAction && tableType === 'onboarding'" (click)="bulkStopAction()"> 
+    <button *ngIf="visibleButtons.showStopAction && tableType === 'onboarding'" (click)="bulkStopAction()">
       <img src="../../assets/ban.png" alt="" />
       <span>Ngưng thực hiện</span>
     </button>
@@ -35,7 +34,6 @@
     </button>
   </div>
 </div>
-
 <div class="table-container">
   <div class="table-list">
     <table>
@@ -129,11 +127,11 @@
           <td>{{ job.PositionApprovedName }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
-          <td [style.color]="job.Status | statusColor">
-            {{ jobStatusService.getStatus(job.Status) }}
+          <td>
+            {{ jobStatusService.getStatus(tableType, job.Status) }}
           </td>
           <td>
-            <ng-container *ngFor="let icon of jobIconService.getIcons(job.Status, tableType)">
+            <ng-container *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status)">
               <img [src]="icon" alt="Icon" class="status-icon" />
             </ng-container>
           </td>

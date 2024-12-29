@@ -88,11 +88,17 @@ $primary-color: #5A6276;
       &.status-pending {
         background-color: rgba(10, 175, 254, 0.2);
       }
+      &.status-in-progress {
+        background-color: rgba(255, 165, 0, 0.2);
+      }
       &.status-completed {
         background-color: rgba(26, 102, 52, 0.2);
       }
       &.status-stopped {
-        background-color: rgba(149, 157, 179, 0.2);
+        background-color: rgba(255, 0, 0, 0.2);
+      }
+      &.status-pending-approval {
+        background-color: rgba(255, 215, 0, 0.2);
       }
       &:hover {
         opacity: 0.8;
