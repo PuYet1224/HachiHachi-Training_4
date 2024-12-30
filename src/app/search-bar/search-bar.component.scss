@@ -17,6 +17,10 @@
   &:hover {
     background-color: #155d2d;
   }
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
   .button-icon, .plus-icon {
     width: 16px;
     height: 16px;
@@ -33,6 +37,11 @@
   width: 100%;
   padding: 12px 24px;
   box-sizing: border-box;
+
+  &.disabled {
+    opacity: 0.7;
+  }
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
@@ -57,12 +66,14 @@
   gap: 12px;
   flex-grow: 1;
   margin-left: 24px;
+
   &.left-t {
     @media (max-width: 768px) {
       flex-direction: column;
       margin-left: 0;
     }
   }
+
   &.right-t {
     justify-content: flex-end;
     @media (max-width: 768px) {
@@ -81,9 +92,11 @@
   background-color: #fff;
   padding: 3px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+
   @media (max-width: 768px) {
     width: 100%;
   }
+
   .input-icon {
     width: 25px;
     height: 29px;
@@ -96,6 +109,7 @@
       filter: grayscale(100%) brightness(0.7);
     }
   }
+
   .search-input {
     flex-grow: 1;
     padding: 4px 8px;
@@ -116,6 +130,7 @@
   height: 29px;
   padding: 18px 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;
@@ -128,6 +143,7 @@
   height: 29px;
   padding: 18px 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;

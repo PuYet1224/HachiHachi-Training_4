@@ -13,9 +13,29 @@
 </div>
 =======
   <app-header1></app-header1>
-  <app-onboard></app-onboard>
-  <app-job-overview></app-job-overview>
-  <app-search-bar (searchQuery)="onSearchQuery($event)"></app-search-bar>
-  <app-table-list [searchTerm]="searchTerm"></app-table-list>
+  <app-onboard [disabled]="isDisabled" (toggleOnboarding)="switchTable($event)"></app-onboard>
+  <app-job-overview
+    [disabled]="isDisabled"
+    [tableType]="currentTable"
+    (statusClicked)="onStatusClicked($event)"
+  ></app-job-overview>
+  <app-search-bar [disabled]="isDisabled" (searchQuery)="onSearchQuery($event)"></app-search-bar>
+  <app-table-list
+    [searchTerm]="searchTerm"
+    [tableType]="currentTable"
+    [sortStatusId]="currentSortStatusId"
+    (actionBarOpened)="onActionBarOpened($event)"
+    (rowCountChange)="rowCount = $event"
+    (statusCounts)="onStatusCounts($event)"
+  ></app-table-list>
+  <app-footer
+    [rowsPerPage]="rowsPerPage"
+    [rowCount]="rowCount"
+    [currentPage]="currentPage"
+    [disabled]="isDisabled"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)"
+  >
+  </app-footer>
 </div>
 >>>>>>> 08eb0f79d03bad837186842a80e400dd2c36563b

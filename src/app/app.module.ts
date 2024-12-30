@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { StatusColorModule } from './pipes/status-color.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +14,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { Header1Component } from './header1/header1.component';
 import { TableListComponent } from './table-list/table-list.component';
 import { FooterComponent } from './footer/footer.component';
+import { MenuService } from './services/menu.service';
 
 @NgModule({
   declarations: [
@@ -28,9 +31,13 @@ import { FooterComponent } from './footer/footer.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    StatusColorModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    MenuService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

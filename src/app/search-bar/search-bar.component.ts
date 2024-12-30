@@ -1,5 +1,4 @@
-// src/app/search-bar/search-bar.component.ts
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
@@ -8,6 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SearchBarComponent {
   @Output() searchQuery = new EventEmitter<string>();
+  @Input() disabled: boolean = false;
   searchTerm: string = '';
 
   onSearchChange() {

@@ -1,18 +1,49 @@
-<!-- src/app/table-list/table-list.component.html -->
+<div *ngIf="selectedJobs.length > 0" class="action-bar">
+  <div class="action-buttons">
+    <div class="action-count">
+      <span>{{ selectedJobs.length }}</span>
+      <span>Đã chọn</span>
+    </div>
+    <button *ngIf="visibleButtons.showNoAction && tableType === 'pre-onboarding'" (click)="bulkNoAction()">
+      <img src="../../assets/ban.png" alt="" />
+      <span>Không thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showStopAction && tableType === 'onboarding'" (click)="bulkStopAction()">
+      <img src="../../assets/ban.png" alt="" />
+      <span>Ngưng thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showDelete && tableType === 'pre-onboarding'" class="delete-btn" (click)="bulkDelete()">
+      <img src="../../assets/trash.png" alt="" />
+      <span>Xóa công việc</span>
+    </button>
+    <button *ngIf="visibleButtons.showReopen" (click)="bulkReopen()">
+      <img src="../../assets/circle_arrow.png" alt="" />
+      <span>Mở lại</span>
+    </button>
+    <button *ngIf="visibleButtons.showSubmit && tableType === 'onboarding'" (click)="bulkSubmit()">
+      <img src="../../assets/send.png" alt="" />
+      <span>Duyệt</span>
+    </button>
+    <button *ngIf="visibleButtons.showComplete && tableType === 'onboarding'" (click)="bulkComplete()">
+      <img src="../../assets/done.png" alt="" />
+      <span>Hoàn tất</span>
+    </button>
+    <img src="../../assets/partition.png" alt="" />
+    <button (click)="closeActionBar()">
+      <img src="../../assets/close.png" alt="" />
+    </button>
+  </div>
+</div>
 <div class="table-container">
   <div class="table-list">
     <table>
       <thead>
         <tr>
           <th>
-            <input type="checkbox" />
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="allSelected" [disabled]="disabled" />
           </th>
-          <th>
-            Tên công việc
-          </th>
-          <th>
-            Mô tả
-          </th>
+          <th>Tên công việc</th>
+          <th>Mô tả</th>
           <th (click)="sortTable('AssigneeBy')">
             <div class="header-content">
               Thực hiện bởi
@@ -69,17 +100,23 @@
               />
             </div>
           </th>
-          <th>
-            Tình trạng
-          </th>
+          <th>Tình trạng</th>
           <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let job of displayedJobs">
+        <tr
+          *ngFor="let job of displayedJobs; let i = index"
+          [ngClass]="[getStatusClass(job.Status), isSelected(job) ? 'selected-row' : '']"
+        >
           <td>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              [checked]="isSelected(job)"
+              (change)="toggleSelectItem(job)"
+              [disabled]="disabled"
+            />
           </td>
           <td>
             <p class="job-name">{{ job.TaskName }}</p>
@@ -90,12 +127,33 @@
           <td>{{ job.PositionApprovedName }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
-          <td>{{ getStatus(job.Status) }}</td>
           <td>
-            <img src="../../assets/ban.png" alt="Ban" class="ban-icon" />
+            {{ jobStatusService.getStatus(tableType, job.Status) }}
           </td>
           <td>
-            <img src="../../assets/three-dots.png" alt="Actions" class="three-dots" />
+            <ng-container *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status)">
+              <img [src]="icon" alt="Icon" class="status-icon" />
+            </ng-container>
+          </td>
+          <td class="action-cell">
+            <img
+              src="../../assets/three-dots.png"
+              alt="Actions"
+              class="actions"
+              (click)="toggleActionMenu(job, i)"
+              [class.disabled]="disabled"
+            />
+            <div class="action-menu" *ngIf="activeActionMenuId === 'item-' + i + '-' + job.TaskName">
+              <ul>
+                <li
+                  *ngFor="let action of getActions(job.Status)"
+                  (click)="performAction(action, job)"
+                >
+                  <img [src]="jobIconService.getIconsByAction(action)" />
+                  {{ action }}
+                </li>
+              </ul>
+            </div>
           </td>
         </tr>
         <tr *ngIf="displayedJobs.length === 0">
@@ -107,12 +165,3 @@
     </table>
   </div>
 </div>
-<app-footer
-  [rowsPerPage]="rowsPerPage"
-  [rowCount]="filteredJobs.length" 
-  [currentPage]="currentPage"
-  [disabled]="false"
-  (pageChange)="onPageChange($event)"
-  (itemsPerPageChange)="onItemsPerPageChange($event)"
->
-</app-footer>

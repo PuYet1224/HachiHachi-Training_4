@@ -2,3 +2,25 @@ app-table
 {
   height: calc(100vh - 187px) !important;
 }
+.main-container {
+  padding: 20px;
+}
+
+.table-switch {
+  margin: 10px 0;
+}
+
+.table-switch button {
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+
+.table-switch button.active {
+  background-color: #0D99FF;
+  color: #fff;
+  border: none;
+}
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

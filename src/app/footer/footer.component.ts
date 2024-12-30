@@ -8,14 +8,14 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 export class FooterComponent implements OnChanges {
   @Input() rowsPerPage: number = 25;
   @Input() rowCount: number = 0;
-  @Input() currentPage: number = 1; 
-  @Input() disabled: boolean = false; 
+  @Input() currentPage: number = 1;
+  @Input() disabled: boolean = false;
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() itemsPerPageChange = new EventEmitter<number>();
 
   totalPages: number = 1;
-  groupSize: number = 3; 
+  groupSize: number = 3;
   left_arrow = 'assets/left-chevron.png';
   right_arrow = 'assets/right-chevron.png';
 

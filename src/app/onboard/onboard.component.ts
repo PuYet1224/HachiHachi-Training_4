@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-onboard',
@@ -6,9 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./onboard.component.scss']
 })
 export class OnboardComponent {
-  isOnboarding = false;
+  @Output() toggleOnboarding = new EventEmitter<'pre-onboarding' | 'onboarding'>();
+  @Input() disabled: boolean = false;
+  isOnboarding: boolean = false;
 
-  onOffboardingClick() {
-    this.isOnboarding = true;
+  onToggleClick() {
+    if (this.disabled) return;
+    this.isOnboarding = !this.isOnboarding;
+    this.toggleOnboarding.emit(this.isOnboarding ? 'onboarding' : 'pre-onboarding');
   }
 }
