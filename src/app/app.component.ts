@@ -7,12 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = '3PSolution';
-  isDisabled: boolean = false;
-  searchTerm: string = '';
+  isDisabled = false;
+  searchTerm = '';
   currentTable: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
-  rowsPerPage: number = 25;
-  rowCount: number = 0;
-  currentPage: number = 1;
+  rowsPerPage = 25;
+  rowCount = 0;
+  currentPage = 1;
   currentSortStatusId: number | null = null;
 
   onSearchQuery(term: string) {

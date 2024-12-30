@@ -1,4 +1,4 @@
-<div *ngIf="selectedJobs.length > 0" class="action-bar">
+<div class="action-bar" *ngIf="selectedJobs.length > 0">
   <div class="action-buttons">
     <div class="action-count">
       <span>{{ selectedJobs.length }}</span>
@@ -21,12 +21,17 @@
       <span>Mở lại</span>
     </button>
     <button *ngIf="visibleButtons.showSubmit && tableType === 'onboarding'" (click)="bulkSubmit()">
-      <img src="../../assets/send.png" alt="" />
+      <img src="../../assets/done.png" alt="" />
       <span>Duyệt</span>
     </button>
-    <button *ngIf="visibleButtons.showComplete && tableType === 'onboarding'" (click)="bulkComplete()">
-      <img src="../../assets/done.png" alt="" />
-      <span>Hoàn tất</span>
+    <img src="../../assets/partition.png" alt="" />
+    <button>
+      <img src="../../assets/human.png" alt="" />
+      <span>Thực hiện bởi</span>
+    </button>
+    <button>
+      <img src="../../assets/approve.png" alt="" />
+      <span>Duyệt bởi</span>
     </button>
     <img src="../../assets/partition.png" alt="" />
     <button (click)="closeActionBar()">
@@ -127,9 +132,7 @@
           <td>{{ job.PositionApprovedName }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
-          <td>
-            {{ jobStatusService.getStatus(tableType, job.Status) }}
-          </td>
+          <td>{{ jobStatusService.getStatus(tableType, job.Status) }}</td>
           <td>
             <ng-container *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status)">
               <img [src]="icon" alt="Icon" class="status-icon" />

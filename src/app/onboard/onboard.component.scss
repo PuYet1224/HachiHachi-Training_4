@@ -3,37 +3,13 @@
 $primary-color: #1A6634;
 $secondary-color: #808c99;
 $background-color: #f3f4f6;
-@import 'src/styles';
 
 .app-onboard {
     padding: 4px; 
     background-color: $background-color;
 
-<<<<<<< HEAD
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
-  background-color: $background-color;
-  border-radius: 4px;
-<<<<<<< HEAD
-=======
-  font-family: $primary-font;
->>>>>>> f6018e304c9fda60ad86b4b416053669db3205e2
-  font-size: 13px;
-  font-family: $primary-font;
-
-  .breadcrumb-item {
-    color: $secondary-color;
-    font-weight: 600;
-
-    &.active {
-      color: $primary-color;
-      font-weight: 600;
-=======
     &.disabled {
       opacity: 0.7;
->>>>>>> fc89e96986dc73a2c0c45889bab8365cdcc83426
     }
 
     .breadcrumb {
@@ -45,30 +21,9 @@ $background-color: #f3f4f6;
       font-family: $primary-font;
       font-size: 13px;
 
-<<<<<<< HEAD
-  .offboarding-btn {
-    margin-left: auto;
-    background-color: $primary-color;
-    color: white;
-    display: flex;
-    align-items: center;
-    border: none;
-    border-radius: 2px;
-    padding: 18px 8px;
-    font-size: 13px;
-    cursor: pointer;
-    font-family: $primary-font;
-<<<<<<< HEAD
-=======
-    font-weight: 600;
-    height: 32px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
->>>>>>> f6018e304c9fda60ad86b4b416053669db3205e2
-=======
       .breadcrumb-item {
         color: $secondary-color;
         font-weight: 600;
->>>>>>> fc89e96986dc73a2c0c45889bab8365cdcc83426
 
         &.active {
           color: $primary-color;

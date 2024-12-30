@@ -13,11 +13,11 @@ export class JobIconService {
       if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}ban.png`];
       return [];
     } else {
-      if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}ban.png`];
-      if (status === JobStatus.DANG_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
-      if (status === JobStatus.HOAN_TAT) return [`${this.basePath}done.png`];
-      if (status === JobStatus.NGUNG_THUC_HIEN) return [`${this.basePath}ban.png`];
-      if (status === JobStatus.CHO_DUYET) return [`${this.basePath}send.png`];
+      if (status === JobStatus.DANG_THUC_HIEN) return [`${this.basePath}send.png`, `${this.basePath}ban.png`];
+      if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
+      if (status === JobStatus.HOAN_TAT) return [`${this.basePath}eye.png`];
+      if (status === JobStatus.NGUNG_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
+      if (status === JobStatus.CHO_DUYET) return [`${this.basePath}done.png`];
       return [];
     }
   }
@@ -27,7 +27,7 @@ export class JobIconService {
       'Chưa thực hiện': `${this.basePath}circle_arrow.png`,
       'Không thực hiện': `${this.basePath}ban.png`,
       'Đang thực hiện': `${this.basePath}circle_arrow.png`,
-      'Hoàn tất': `${this.basePath}done.png`,
+      'Duyệt': `${this.basePath}done.png`,
       'Ngưng thực hiện': `${this.basePath}ban.png`,
       'Chờ duyệt': `${this.basePath}send.png`,
       'Xóa công việc': `${this.basePath}trash.png`

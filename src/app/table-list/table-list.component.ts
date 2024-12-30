@@ -19,9 +19,9 @@ interface JobWithActionMenu extends JobNameDTO {
   styleUrls: ['./table-list.component.scss']
 })
 export class TableListComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() searchTerm: string = '';
+  @Input() searchTerm = '';
   @Input() tableType: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input() sortStatusId: JobStatus | null = null;
   @Output() actionBarOpened = new EventEmitter<boolean>();
   @Output() rowCountChange = new EventEmitter<number>();
@@ -30,13 +30,12 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   jobNames: JobWithActionMenu[] = [];
   filteredJobs: JobWithActionMenu[] = [];
   selectedJobs: JobWithActionMenu[] = [];
-  allSelected: boolean = false;
-  isDeleteModalVisible: boolean = false;
-  currentPage: number = 1;
-  rowsPerPage: number = 25;
+  allSelected = false;
+  isDeleteModalVisible = false;
+  currentPage = 1;
+  rowsPerPage = 25;
   sortField: keyof JobNameDTO = 'TaskName';
   sortDirection: 'asc' | 'desc' = 'asc';
-
   fuse!: Fuse<JobWithActionMenu>;
   subscription: Subscription = new Subscription();
   activeActionMenuId: string | null = null;
@@ -80,29 +79,21 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   filterJobs(): void {
     let temp: JobWithActionMenu[];
-
-    // 1) Tìm kiếm
     if (!this.searchTerm.trim()) {
       temp = [...this.jobNames];
     } else {
       const results = this.fuse.search(this.searchTerm);
       temp = results.map((res: FuseResult<JobWithActionMenu>) => res.item);
     }
-
-    // 2) Lọc theo tableType
     if (this.tableType === 'pre-onboarding') {
-      // status = 1,2
       temp = temp.filter(x => x.Status === JobStatus.CHUA_THUC_HIEN || x.Status === JobStatus.KHONG_THUC_HIEN);
     } else {
-      // onboarding => 1..6
-      temp = temp.filter(x => [1,2,3,4,5,6].includes(x.Status));
+      temp = temp.filter(x => [2, 3, 4, 5, 6].includes(x.Status));
     }
-
-    // 3) Sort: nếu sortStatusId != null => sort status đó lên đầu
     if (this.sortStatusId !== null) {
       temp.sort((a, b) => {
-        const aPriority = (a.Status === this.sortStatusId) ? 0 : 1;
-        const bPriority = (b.Status === this.sortStatusId) ? 0 : 1;
+        const aPriority = a.Status === this.sortStatusId ? 0 : 1;
+        const bPriority = b.Status === this.sortStatusId ? 0 : 1;
         if (aPriority !== bPriority) {
           return aPriority - bPriority;
         }
@@ -111,17 +102,12 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       temp.sort((a, b) => this.compare(a, b, this.sortField, this.sortDirection));
     }
-
     this.filteredJobs = temp;
-
-    // Đếm status
     const cnt: { [key: number]: number } = {};
     this.filteredJobs.forEach(j => {
       cnt[j.Status] = (cnt[j.Status] || 0) + 1;
     });
     this.statusCounts.emit(cnt);
-
-    // Reset page
     this.currentPage = 1;
     this.rowCountChange.emit(this.filteredJobs.length);
   }
@@ -158,21 +144,21 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   getActions(s: JobStatus): string[] {
     if (this.tableType === 'pre-onboarding') {
-      if (s === JobStatus.CHUA_THUC_HIEN) return ['Chưa thực hiện'];
-      if (s === JobStatus.KHONG_THUC_HIEN) return ['Không thực hiện', 'Xóa công việc'];
+      if (s === JobStatus.CHUA_THUC_HIEN) return ['Chỉnh sửa', 'Không thực hiện', 'Xóa công việc'];
+      if (s === JobStatus.KHONG_THUC_HIEN) return ['Xem chi tiết', 'Mở lại'];
       return [];
     }
-    if (s === JobStatus.KHONG_THUC_HIEN) return ['Không thực hiện'];
-    if (s === JobStatus.DANG_THUC_HIEN) return ['Đang thực hiện'];
-    if (s === JobStatus.HOAN_TAT) return ['Hoàn tất'];
-    if (s === JobStatus.NGUNG_THUC_HIEN) return ['Ngưng thực hiện'];
-    if (s === JobStatus.CHO_DUYET) return ['Chờ duyệt'];
+    if (s === JobStatus.KHONG_THUC_HIEN) return ['Chỉnh sửa', 'Mở lại'];
+    if (s === JobStatus.DANG_THUC_HIEN) return ['Chỉnh sửa', 'Ngưng thực hiện', 'Gửi duyệt'];
+    if (s === JobStatus.HOAN_TAT) return [];
+    if (s === JobStatus.NGUNG_THUC_HIEN) return ['Chỉnh sửa', 'Mở lại'];
+    if (s === JobStatus.CHO_DUYET) return ['Xem chi tiết', 'Duyệt'];
     return [];
   }
 
   toggleActionMenu(job: JobWithActionMenu, i: number): void {
     const id = 'item-' + i + '-' + job.TaskName;
-    this.activeActionMenuId = (this.activeActionMenuId === id) ? null : id;
+    this.activeActionMenuId = this.activeActionMenuId === id ? null : id;
   }
 
   performAction(action: string, job: JobWithActionMenu): void {
@@ -196,7 +182,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.selectedJobs.push(job);
     }
-    this.allSelected = (this.selectedJobs.length === this.displayedJobs.length);
+    this.allSelected = this.selectedJobs.length === this.displayedJobs.length;
     this.actionBarOpened.emit(this.selectedJobs.length > 0);
   }
 
@@ -206,7 +192,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   getStatusClass(s: JobStatus): string {
     if (this.tableType === 'pre-onboarding') {
-      if (s === JobStatus.CHUA_THUC_HIEN) return 'status-not-executed';
+      if (s === JobStatus.CHUA_THUC_HIEN) return 'status-not-yet-executed';
       if (s === JobStatus.KHONG_THUC_HIEN) return 'status-stopped';
       return '';
     }
@@ -222,20 +208,22 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.tableType === 'pre-onboarding') {
       return {
         showNoAction: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
-        showDelete: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN),
-        showReopen: false,
+        showDelete: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
+        showReopen: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN),
         showStopAction: false,
         showSubmit: false,
         showComplete: false
       };
     }
     return {
-      showNoAction: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN),
+      showNoAction: false,
       showDelete: false,
-      showReopen: false,
+      showReopen: this.selectedJobs.some(
+        x => x.Status === JobStatus.KHONG_THUC_HIEN || x.Status === JobStatus.NGUNG_THUC_HIEN
+      ),
       showStopAction: this.selectedJobs.some(x => x.Status === JobStatus.DANG_THUC_HIEN),
-      showSubmit: this.selectedJobs.some(x => x.Status === JobStatus.CHO_DUYET),
-      showComplete: this.selectedJobs.some(x => x.Status === JobStatus.HOAN_TAT)
+      showSubmit: this.selectedJobs.some(x => x.Status === JobStatus.CHO_DUYET || x.Status === JobStatus.DANG_THUC_HIEN),
+      showComplete: false
     };
   }
 

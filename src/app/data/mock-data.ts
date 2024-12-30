@@ -2,7 +2,6 @@ import { JobNameDTO, TypeStaff } from '../models/job-name.dto';
 import { EmployeeDTO } from '../models/employee.dto';
 
 export const MOCK_JOB_NAMES: JobNameDTO[] = [
-  // ====== PRE-ONBOARDING: 2 item "Chưa thực hiện" (Status=1) + 2 item "Không thực hiện" (Status=2)
   {
     Code: 100,
     TaskName: 'Pre-Công việc Chưa 1',
@@ -156,8 +155,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     ReasonDescription: 'Không thực hiện'
   },
 
-  // ====== ONBOARDING: Mỗi status 1..6 có 2 item
-  // -- Status=1: Không thực hiện
   {
     Code: 200,
     TaskName: 'On-Công việc Không 1',
@@ -170,7 +167,7 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     PositionApproved: 205,
     StartDate: '2024-05-01',
     EndDate: '2024-05-06',
-    Status: 1,
+    Status: 2,
     Remark: '',
     Assignee: 1101,
     AssigneeName: 'Ngô Văn K1',
@@ -208,7 +205,7 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     PositionApproved: 206,
     StartDate: '2024-06-01',
     EndDate: '2024-06-06',
-    Status: 1,
+    Status: 2,
     Remark: '',
     Assignee: 1102,
     AssigneeName: 'Hoàng Văn M1',
@@ -234,7 +231,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     Reason: 0,
     ReasonDescription: ''
   },
-  // -- Status=2: Ngưng thực hiện
   {
     Code: 202,
     TaskName: 'On-Công việc Ngưng 1',
@@ -311,7 +307,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     Reason: 1,
     ReasonDescription: 'Ngưng thực hiện'
   },
-  // -- Status=3: Đang thực hiện
   {
     Code: 204,
     TaskName: 'On-Công việc Đang 1',
@@ -388,7 +383,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     Reason: 0,
     ReasonDescription: ''
   },
-  // -- Status=4: Hoàn tất
   {
     Code: 206,
     TaskName: 'On-Công việc Hoàn 1',
@@ -465,7 +459,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     Reason: 0,
     ReasonDescription: ''
   },
-  // -- Status=5: Ngưng thực hiện
   {
     Code: 208,
     TaskName: 'On-Công việc Ngưng 3',
@@ -542,7 +535,6 @@ export const MOCK_JOB_NAMES: JobNameDTO[] = [
     Reason: 1,
     ReasonDescription: 'Ngưng thực hiện'
   },
-  // -- Status=6: Chờ duyệt
   {
     Code: 210,
     TaskName: 'On-Công việc Chờ 1',

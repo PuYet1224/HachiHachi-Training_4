@@ -3,10 +3,11 @@
 $primary-color: #5A6276;
 
 .table-container {
-  height: calc(100vh - 300px);
+  height: calc(100vh - 60px);
   width: calc(100vw - 245px);
   margin: 0 auto;
-  overflow: auto;
+  overflow-y: auto; 
+  overflow-x: hidden;  
   &::-webkit-scrollbar {
     width: 4px;
     height: 93px;
@@ -175,12 +176,13 @@ $primary-color: #5A6276;
 
 .action-menu {
   position: absolute;
-  top: 16px;
+  top: 36px;
   right: 37px;
   background: #bdc2d2;
   z-index: 100;
-  border-radius: 4px;
+  border-radius: 2px;
   overflow: hidden;
+  width: 150px;
   ul {
     list-style: none;
     padding: 0;

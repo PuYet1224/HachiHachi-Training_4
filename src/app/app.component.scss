@@ -1,9 +1,15 @@
-app-table
-{
-  height: calc(100vh - 187px) !important;
-}
+
 .main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+app-table {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .table-switch {
@@ -20,7 +26,8 @@ app-table
   color: #fff;
   border: none;
 }
+
 .disabled {
-  opacity: 0.5;
+  opacity: 0.7;
   pointer-events: none;
 }
