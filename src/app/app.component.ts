@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'HachiHachi';
+  searchTerm = '';
+
+  onSearchQuery(term: string) {
+    this.searchTerm = term;
+  }
 }

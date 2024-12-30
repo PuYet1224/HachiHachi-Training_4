@@ -10,7 +10,6 @@ $primary-color: #5A6276;
   height: calc(100vh - 300px);
   width: calc(100vw - 245px);
   overflow: auto;
-
   &::-webkit-scrollbar {
     width: 4px;
     height: 93px;
@@ -24,7 +23,6 @@ $primary-color: #5A6276;
   }
 }
 
-
 .table-list {
   table {
     width: calc(100vw - 245px);
@@ -36,73 +34,86 @@ $primary-color: #5A6276;
     text-overflow: ellipsis;
     overflow-x: auto;
     white-space: nowrap;
-
     thead tr th,
     tbody tr td {
       padding: 6px 10px;
       vertical-align: middle;
       position: relative;
     }
-
     thead tr th {
       background: #EDEFF3;
-      color: #5A6276;
-      height: 50px;
-      text-align: left;
-
+      color: $primary-color;
+      padding: 0 10px;
+      .header-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        .sort-icon {
+          transition: transform 0.3s ease;
+          &.asc {
+            transform: rotate(0deg);
+          }
+          &.desc {
+            transform: rotate(180deg);
+          }
+        }
+      }
       &:nth-of-type(6),
-      &:nth-of-type(7),
+      &:nth-of-type(7) {
+        text-align: center !important;
+      }
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
+        text-align: left;
+      }
       &:nth-of-type(1) {
         text-align: center;
       }
-
       &:nth-of-type(8) {
         text-align: right;
       }
-
       .sort-icon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
         width: 10px;
         height: 13px;
       }
     }
-
+    thead tr th:nth-of-type(6) .header-content,
+    thead tr th:nth-of-type(7) .header-content {
+      justify-content: center !important;
+    }
     tbody tr {
-      height: 50px;
       background: #fff;
-
       &:hover {
         background: rgba(26, 102, 52, 0.7);
       }
-
       td {
         &:nth-of-type(2),
         &:nth-of-type(3),
-        &:nth-of-type(5),
-        &:nth-of-type(4) {
+        &:nth-of-type(4),
+        &:nth-of-type(5) {
           text-align: left;
         }
-
+        &:nth-of-type(1),
         &:nth-of-type(6),
         &:nth-of-type(7),
-        &:nth-of-type(10),
-        &:nth-of-type(1) {
+        &:nth-of-type(10) {
           text-align: center;
         }
-
         &:nth-of-type(8) {
           text-align: right;
-        }
-        &:nth-of-type(9){
-          cursor: pointer;
-          text-align: center;
         }
         &:nth-of-type(1) {
           width: 60px;
         }
-
+        &:nth-of-type(9) {
+          cursor: pointer;
+          text-align: center;
+          .ban-icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
         &:nth-of-type(10) {
           border-left: 1px solid #bdc2d2;
           width: 35px;
@@ -110,11 +121,6 @@ $primary-color: #5A6276;
             cursor: pointer;
             width: 16px;
           }
-        }
-
-        .ban-icon {
-          width: 20px;
-          height: 20px;
         }
       }
     }
@@ -158,7 +164,7 @@ $primary-color: #5A6276;
     padding: 0;
     margin: 0;
     li {
-      padding: 4px 6px; 
+      padding: 4px 6px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -177,7 +183,7 @@ input[type="checkbox"] {
   width: 16px;
   height: 16px;
   margin-right: 8px;
-  border: 1px solid #959db3;
+  border: 2px solid #959db3;
   border-radius: 4px;
   cursor: pointer;
   position: relative;
@@ -189,6 +195,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::before {
+  content: "";
   position: absolute;
   top: 0px;
   left: 4px;
