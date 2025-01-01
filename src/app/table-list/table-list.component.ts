@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import Fuse, { FuseResult } from 'fuse.js';
 import { JobNameDTO } from '../models/job-name.dto';
 import { MOCK_JOB_NAMES } from '../data/mock-data';
-import { PaginationService } from '../services/pagination.service';
 import { JobStatusService } from '../services/job-status.service';
 import { JobIconService } from '../services/job-icon.service';
 import { JobStatus } from '../enum/job-status.enum';
@@ -32,8 +31,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   selectedJobs: JobWithActionMenu[] = [];
   allSelected = false;
   isDeleteModalVisible = false;
-  currentPage = 1;
-  rowsPerPage = 25;
   sortField: keyof JobNameDTO = 'TaskName';
   sortDirection: 'asc' | 'desc' = 'asc';
   fuse!: Fuse<JobWithActionMenu>;
@@ -42,7 +39,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   private originalOrder: JobWithActionMenu[] = [];
 
   constructor(
-    private paginationService: PaginationService,
     public jobStatusService: JobStatusService,
     public jobIconService: JobIconService
   ) {}
@@ -59,12 +55,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
       threshold: 0.4
     });
     this.filterJobs();
-    this.subscription.add(this.paginationService.itemsPerPage$.subscribe(val => {
-      this.rowsPerPage = val;
-    }));
-    this.subscription.add(this.paginationService.currentPage$.subscribe(val => {
-      this.currentPage = val;
-    }));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -108,7 +98,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
       cnt[j.Status] = (cnt[j.Status] || 0) + 1;
     });
     this.statusCounts.emit(cnt);
-    this.currentPage = 1;
     this.rowCountChange.emit(this.filteredJobs.length);
   }
 
@@ -125,11 +114,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     if (asStr < bsStr) return dir === 'asc' ? -1 : 1;
     if (asStr > bsStr) return dir === 'asc' ? 1 : -1;
     return a.originalIndex - b.originalIndex;
-  }
-
-  get displayedJobs(): JobWithActionMenu[] {
-    const start = (this.currentPage - 1) * this.rowsPerPage;
-    return this.filteredJobs.slice(start, start + this.rowsPerPage);
   }
 
   sortTable(field: keyof JobNameDTO): void {
@@ -162,13 +146,13 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   performAction(action: string, job: JobWithActionMenu): void {
-    this.toggleActionMenu(job, this.displayedJobs.indexOf(job));
+    this.toggleActionMenu(job, this.filteredJobs.indexOf(job));
   }
 
   toggleSelectAll(e: any): void {
     this.allSelected = e.target.checked;
     if (this.allSelected) {
-      this.selectedJobs = [...this.displayedJobs];
+      this.selectedJobs = [...this.filteredJobs];
     } else {
       this.selectedJobs = [];
     }
@@ -182,7 +166,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.selectedJobs.push(job);
     }
-    this.allSelected = this.selectedJobs.length === this.displayedJobs.length;
+    this.allSelected = this.selectedJobs.length === this.filteredJobs.length;
     this.actionBarOpened.emit(this.selectedJobs.length > 0);
   }
 
@@ -279,14 +263,5 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   bulkComplete(): void {
     this.closeActionBar();
-  }
-
-  onPageChange(page: number): void {
-    this.paginationService.setCurrentPage(page);
-  }
-
-  onItemsPerPageChange(n: number): void {
-    this.paginationService.setItemsPerPage(n);
-    this.paginationService.setCurrentPage(1);
   }
 }

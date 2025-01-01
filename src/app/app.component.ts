@@ -10,10 +10,8 @@ export class AppComponent {
   isDisabled = false;
   searchTerm = '';
   currentTable: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
-  rowsPerPage = 25;
-  rowCount = 0;
-  currentPage = 1;
   currentSortStatusId: number | null = null;
+  rowCount = 0;
 
   onSearchQuery(term: string) {
     this.searchTerm = term;
@@ -26,15 +24,6 @@ export class AppComponent {
 
   onActionBarOpened(opened: boolean) {
     this.isDisabled = opened;
-  }
-
-  onPageChange(page: number) {
-    this.currentPage = page;
-  }
-
-  onItemsPerPageChange(newRowsPerPage: number) {
-    this.rowsPerPage = newRowsPerPage;
-    this.currentPage = 1;
   }
 
   onStatusCounts(counts: { [key: number]: number }) {

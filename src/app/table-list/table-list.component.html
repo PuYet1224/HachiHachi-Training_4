@@ -112,7 +112,7 @@
       </thead>
       <tbody>
         <tr
-          *ngFor="let job of displayedJobs; let i = index"
+          *ngFor="let job of filteredJobs; let i = index"
           [ngClass]="[getStatusClass(job.Status), isSelected(job) ? 'selected-row' : '']"
         >
           <td>
@@ -159,7 +159,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="displayedJobs.length === 0">
+        <tr *ngIf="filteredJobs.length === 0">
           <td colspan="10" class="no-data">
             Không có dữ liệu hiển thị
           </td>

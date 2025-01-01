@@ -3,7 +3,7 @@
 $primary-color: #5A6276;
 
 .table-container {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 440px);
   width: calc(100vw - 245px);
   margin: 0 auto;
   overflow-y: auto; 
@@ -248,6 +248,10 @@ input[type="checkbox"]:checked::before {
 .action-cell {
   position: relative;
 }
+.action-bar img[src="../../assets/partition.png"] {
+  height: 50px;
+  align-self: center;
+}
 
 .action-bar {
   position: fixed;
@@ -269,7 +273,7 @@ input[type="checkbox"]:checked::before {
   .action-buttons {
     display: flex;
     gap: 15px;
-    height: 66.77px;
+    height: 87px;
     .action-count {
       display: flex;
       flex-direction: column;
@@ -306,9 +310,6 @@ input[type="checkbox"]:checked::before {
       &.delete-btn img {
         filter: brightness(0) saturate(100%) invert(24%) sepia(85%)
           saturate(7486%) hue-rotate(340deg) brightness(100%);
-      }
-      &.delete-btn span {
-        color: red;
       }
       &:disabled {
         cursor: not-allowed;
