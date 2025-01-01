@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-popup-comfirm',
@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./popup-comfirm.component.scss']
 })
 export class PopupComfirmComponent {
+  @Output() confirm = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
 
+  onConfirm(): void {
+    this.confirm.emit(); 
+  }
+
+  onCancel(): void {
+    this.cancel.emit(); 
+  }
 }

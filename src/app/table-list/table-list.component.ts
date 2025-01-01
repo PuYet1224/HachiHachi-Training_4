@@ -45,6 +45,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   subscription: Subscription = new Subscription();
   activeActionMenuId: string | null = null;
   private originalOrder: JobWithActionMenu[] = [];
+  private updatedStatusCounts: { [key: number]: number } = {};
 
   positions: PositionDTO[] = POSITIONS;
 
@@ -77,6 +78,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['searchTerm'] || changes['tableType'] || changes['sortStatusId']) {
       this.filterJobs();
     }
+    
   }
 
   ngOnDestroy(): void {
@@ -236,8 +238,8 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
       showDelete: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
       showReopen: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN || x.Status === JobStatus.NGUNG_THUC_HIEN),
       showStopAction: this.selectedJobs.some(x => x.Status === JobStatus.DANG_THUC_HIEN),
-      showSubmit: this.selectedJobs.some(x => x.Status === JobStatus.CHO_DUYET || x.Status === JobStatus.DANG_THUC_HIEN),
-      showComplete: false,
+      showSubmit: this.selectedJobs.some(x => x.Status === JobStatus.CHO_DUYET),
+      showComplete:this.selectedJobs.some(x => x.Status === JobStatus.DANG_THUC_HIEN),
       showExecutor: this.selectedJobs.length > 0,
       showApprover: this.selectedJobs.length > 0
     };
@@ -256,14 +258,24 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
   
   onConfirmApproval(): void {
-    if (this.tableType === 'Offboarding') {
-      this.jobNames.forEach(job => {
-        if (job.Status === JobStatus.CHO_DUYET) {
-          job.Status = JobStatus.HOAN_TAT; 
+    if (this.tableType === 'Offboarding' && this.selectedJobToApprove) {
+      this.jobNames = this.jobNames.map(job => {
+        if (
+          this.selectedJobToApprove &&
+          job.TaskName === this.selectedJobToApprove.TaskName &&
+          job.Status === JobStatus.CHO_DUYET
+        ) {
+          return {
+            ...job,
+            Status: JobStatus.HOAN_TAT 
+          };
         }
+        return job;
       });
+  
       this.filterJobs(); 
-      this.showPopupConfirm = false;
+      this.showPopupConfirm = false; 
+      this.selectedJobToApprove = null;
     }
   }
   
@@ -386,6 +398,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
             job.AssigneeID = person.id;
           }
         }
+  
         if (approver) {
           job.PositionApprovedName = approver.position;
           const person = this.getPeople(approver.position).find(
@@ -398,13 +411,37 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
         }
   
         if (newStatus !== undefined) {
-          job.Status = newStatus; 
+          job.Status = newStatus;
+  
+          if (
+            this.tableType === 'pre-Offboarding' &&
+            newStatus === JobStatus.KHONG_THUC_HIEN
+          ) {
+            const correspondingOffboardingJob = this.jobNames.find(
+              j => j.TaskName === job.TaskName && j.Status === JobStatus.DANG_THUC_HIEN
+            );
+            if (correspondingOffboardingJob) {
+              correspondingOffboardingJob.Status = JobStatus.KHONG_THUC_HIEN;
+            }
+          }
+  
+          if (
+            this.tableType === 'Offboarding' &&
+            newStatus === JobStatus.KHONG_THUC_HIEN
+          ) {
+            const correspondingPreOffboardingJob = this.jobNames.find(
+              j => j.TaskName === job.TaskName && j.Status === JobStatus.CHUA_THUC_HIEN
+            );
+            if (correspondingPreOffboardingJob) {
+              correspondingPreOffboardingJob.Status = JobStatus.KHONG_THUC_HIEN;
+            }
+          }
         }
       }
     });
   
     this.filterJobs();
-  }
+  }  
 
   getPeople(positionName: string): PersonDTO[] {
     const position = this.positions.find((p: PositionDTO) => p.name === positionName);
