@@ -1,18 +1,19 @@
+<!-- table-list.component.html -->
 <div class="action-bar" *ngIf="selectedJobs.length > 0">
   <div class="action-buttons">
     <div class="action-count">
       <span>{{ selectedJobs.length }}</span>
       <span>Đã chọn</span>
     </div>
-    <button *ngIf="visibleButtons.showNoAction && tableType === 'pre-onboarding'" (click)="bulkNoAction()">
+    <button *ngIf="visibleButtons.showNoAction && tableType === 'pre-Offboarding'" (click)="bulkNoAction()">
       <img src="../../assets/ban.png" alt="" />
       <span>Không thực hiện</span>
     </button>
-    <button *ngIf="visibleButtons.showStopAction && tableType === 'onboarding'" (click)="bulkStopAction()">
+    <button *ngIf="visibleButtons.showStopAction && tableType === 'Offboarding'" (click)="bulkStopAction()">
       <img src="../../assets/ban.png" alt="" />
       <span>Ngưng thực hiện</span>
     </button>
-    <button *ngIf="visibleButtons.showDelete && tableType === 'pre-onboarding'" class="delete-btn" (click)="bulkDelete()">
+    <button *ngIf="visibleButtons.showDelete && tableType === 'pre-Offboarding'" class="delete-btn" (click)="bulkDelete()">
       <img src="../../assets/trash.png" alt="" />
       <span>Xóa công việc</span>
     </button>
@@ -20,16 +21,16 @@
       <img src="../../assets/circle_arrow.png" alt="" />
       <span>Mở lại</span>
     </button>
-    <button *ngIf="visibleButtons.showSubmit && tableType === 'onboarding'" (click)="bulkSubmit()">
+    <button *ngIf="visibleButtons.showSubmit && tableType === 'Offboarding'" (click)="bulkSubmit()">
       <img src="../../assets/done.png" alt="" />
       <span>Duyệt</span>
     </button>
     <img src="../../assets/partition.png" alt="" />
-    <button>
+    <button (click)="bulkExecutor()">
       <img src="../../assets/human.png" alt="" />
       <span>Thực hiện bởi</span>
     </button>
-    <button>
+    <button (click)="bulkApprover()">
       <img src="../../assets/approve.png" alt="" />
       <span>Duyệt bởi</span>
     </button>
@@ -128,8 +129,8 @@
             <p class="details">{{ job.Description }}</p>
           </td>
           <td>{{ job.Description }}</td>
-          <td>{{ job.AssigneeBy }}</td>
-          <td>{{ job.PositionApprovedName }}</td>
+          <td>{{ job.AssigneeName }} | {{ job.AssigneeID }}</td>
+          <td>{{ job.ApprovedName }} | {{ job.ApprovedID }}</td>
           <td>{{ job.OrderBy }}</td>
           <td>Hết ngày: {{ job.EndDate }}</td>
           <td>{{ jobStatusService.getStatus(tableType, job.Status) }}</td>
@@ -168,3 +169,13 @@
     </table>
   </div>
 </div>
+<app-popup-action
+  #popupAction
+  [tableType]="tableType"
+  (statusUpdated)="handleStatusUpdate($event)"
+></app-popup-action>
+<app-popup-comfirm
+  *ngIf="showPopupConfirm"
+  (confirm)="onConfirmApproval()"
+  (cancel)="onCancelApproval()"
+></app-popup-comfirm>

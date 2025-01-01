@@ -7,8 +7,8 @@ import { JobStatus } from '../enum/job-status.enum';
 export class JobIconService {
   private basePath = '../../assets/';
 
-  getIcons(tableType: 'pre-onboarding' | 'onboarding', status: number): string[] {
-    if (tableType === 'pre-onboarding') {
+  getIcons(tableType: 'pre-Offboarding' | 'Offboarding', status: number): string[] {
+    if (tableType === 'pre-Offboarding') {
       if (status === JobStatus.CHUA_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
       if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}ban.png`];
       return [];
@@ -24,13 +24,14 @@ export class JobIconService {
 
   getIconsByAction(action: string): string {
     const map: { [key: string]: string } = {
-      'Chưa thực hiện': `${this.basePath}circle_arrow.png`,
+      'Chỉnh sửa': `${this.basePath}edit.png`,
       'Không thực hiện': `${this.basePath}ban.png`,
-      'Đang thực hiện': `${this.basePath}circle_arrow.png`,
+      'Xóa công việc': `${this.basePath}trash.png`,
+      'Xem chi tiết': `${this.basePath}eye.png`,
       'Duyệt': `${this.basePath}done.png`,
+      'Mở lại': `${this.basePath}circle_arrow.png`,
       'Ngưng thực hiện': `${this.basePath}ban.png`,
-      'Chờ duyệt': `${this.basePath}send.png`,
-      'Xóa công việc': `${this.basePath}trash.png`
+      'Gửi duyệt': `${this.basePath}send.png`
     };
     return map[action] || '';
   }

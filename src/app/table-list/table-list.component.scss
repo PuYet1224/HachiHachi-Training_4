@@ -1,3 +1,4 @@
+/* table-list.component.scss */
 @import "src/styles";
 
 $primary-color: #5A6276;
@@ -25,7 +26,7 @@ $primary-color: #5A6276;
   table {
     width: 100%;
     margin: 0 auto;
-    font-family: $primary-font;
+    font-family: $primary-font !important;
     font-size: 13px;
     border-spacing: 0 10px;
     border-collapse: separate;
@@ -199,9 +200,10 @@ $primary-color: #5A6276;
       background: #959DB3;
     }
     img {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       filter: brightness(0) saturate(100%) invert(100%);
+      object-fit: contain;
     }
   }
 }
@@ -248,6 +250,7 @@ input[type="checkbox"]:checked::before {
 .action-cell {
   position: relative;
 }
+
 .action-bar img[src="../../assets/partition.png"] {
   height: 50px;
   align-self: center;
@@ -365,7 +368,7 @@ input[type="checkbox"]:checked::before {
       padding: 15px 0;
       border: none;
       cursor: pointer;
-      font-family: $primary-font;
+      font-family: $primary-font !important;
       display: flex;
       gap: 10px;
       justify-content: center;

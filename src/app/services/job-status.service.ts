@@ -5,8 +5,8 @@ import { JobStatus } from '../enum/job-status.enum';
   providedIn: 'root'
 })
 export class JobStatusService {
-  getStatus(tableType: 'pre-onboarding' | 'onboarding', status: JobStatus): string {
-    if (tableType === 'pre-onboarding') {
+  getStatus(tableType: 'pre-Offboarding' | 'Offboarding', status: JobStatus): string {
+    if (tableType === 'pre-Offboarding') {
       if (status === JobStatus.CHUA_THUC_HIEN) return 'Chưa thực hiện';
       if (status === JobStatus.KHONG_THUC_HIEN) return 'Không thực hiện';
       return '';

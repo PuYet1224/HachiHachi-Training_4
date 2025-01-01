@@ -1,4 +1,3 @@
-// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -14,10 +13,13 @@ import { JobOverviewComponent } from './job-overview/job-overview.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { Header1Component } from './header1/header1.component';
 import { TableListComponent } from './table-list/table-list.component';
+import { PopupActionComponent } from './popup-action/popup-action.component';
 
 import { MenuService } from './services/menu.service';
 import { JobStatusService } from './services/job-status.service';
 import { JobIconService } from './services/job-icon.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PopupComfirmComponent } from './popup-comfirm/popup-comfirm.component';
 
 @NgModule({
   declarations: [
@@ -28,14 +30,17 @@ import { JobIconService } from './services/job-icon.service';
     JobOverviewComponent,
     SearchBarComponent,
     Header1Component,
-    TableListComponent
+    TableListComponent,
+    PopupActionComponent,
+    PopupComfirmComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     StatusColorModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     MenuService,

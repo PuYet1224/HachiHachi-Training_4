@@ -36,7 +36,7 @@ $background-color: #f3f4f6;
         color: $secondary-color;
       }
 
-      .onboarding-btn {
+      .Offboarding-btn {
         margin-left: auto;
         background-color: $primary-color;
         color: white;
@@ -54,12 +54,11 @@ $background-color: #f3f4f6;
 
         .icon-power {
           margin-right: 6px;
-          &::before {
-            content: "\21BB";
-            font-weight: bold;
-          }
+          width: 16px; 
+          height: 16px;
+          display: inline-block;
         }
-
+        
         &:hover {
           background-color: #155d2d;
         }

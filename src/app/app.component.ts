@@ -9,15 +9,16 @@ export class AppComponent {
   title = '3PSolution';
   isDisabled = false;
   searchTerm = '';
-  currentTable: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
+  currentTable: 'pre-Offboarding' | 'Offboarding' = 'pre-Offboarding';
   currentSortStatusId: number | null = null;
   rowCount = 0;
+  statusCounts: { [key: number]: number } = {};
 
   onSearchQuery(term: string) {
     this.searchTerm = term;
   }
 
-  switchTable(table: 'pre-onboarding' | 'onboarding') {
+  switchTable(table: 'pre-Offboarding' | 'Offboarding') {
     this.currentTable = table;
     this.currentSortStatusId = null;
   }
@@ -27,6 +28,7 @@ export class AppComponent {
   }
 
   onStatusCounts(counts: { [key: number]: number }) {
+    this.statusCounts = { ...counts };
   }
 
   onStatusClicked(statusId: number) {

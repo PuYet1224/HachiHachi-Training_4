@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+// table-list.component.ts
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Fuse, { FuseResult } from 'fuse.js';
 import { JobNameDTO } from '../models/job-name.dto';
@@ -6,6 +7,10 @@ import { MOCK_JOB_NAMES } from '../data/mock-data';
 import { JobStatusService } from '../services/job-status.service';
 import { JobIconService } from '../services/job-icon.service';
 import { JobStatus } from '../enum/job-status.enum';
+import { PopupActionComponent, StatusUpdateEvent } from '../popup-action/popup-action.component';
+import { PersonDTO } from '../models/position.dto';
+import { POSITIONS } from '../data/positions.data';
+import { PositionDTO } from '../models/position.dto';
 
 interface JobWithActionMenu extends JobNameDTO {
   actionMenuVisible?: boolean;
@@ -19,12 +24,15 @@ interface JobWithActionMenu extends JobNameDTO {
 })
 export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() searchTerm = '';
-  @Input() tableType: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
+  @Input() tableType: 'pre-Offboarding' | 'Offboarding' = 'pre-Offboarding';
   @Input() disabled = false;
   @Input() sortStatusId: JobStatus | null = null;
   @Output() actionBarOpened = new EventEmitter<boolean>();
   @Output() rowCountChange = new EventEmitter<number>();
   @Output() statusCounts = new EventEmitter<{ [key: number]: number }>();
+  @Output() statusCountsChange = new EventEmitter<{ [key: number]: number }>();
+
+  @ViewChild('popupAction') popupAction!: PopupActionComponent;
 
   jobNames: JobWithActionMenu[] = [];
   filteredJobs: JobWithActionMenu[] = [];
@@ -37,6 +45,8 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   subscription: Subscription = new Subscription();
   activeActionMenuId: string | null = null;
   private originalOrder: JobWithActionMenu[] = [];
+
+  positions: PositionDTO[] = POSITIONS;
 
   constructor(
     public jobStatusService: JobStatusService,
@@ -55,6 +65,12 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
       threshold: 0.4
     });
     this.filterJobs();
+
+    this.subscription.add(
+      this.popupAction.statusUpdated.subscribe(event => {
+        this.handleStatusUpdate(event);
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -69,17 +85,20 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   filterJobs(): void {
     let temp: JobWithActionMenu[];
+
     if (!this.searchTerm.trim()) {
       temp = [...this.jobNames];
     } else {
       const results = this.fuse.search(this.searchTerm);
       temp = results.map((res: FuseResult<JobWithActionMenu>) => res.item);
     }
-    if (this.tableType === 'pre-onboarding') {
+
+    if (this.tableType === 'pre-Offboarding') {
       temp = temp.filter(x => x.Status === JobStatus.CHUA_THUC_HIEN || x.Status === JobStatus.KHONG_THUC_HIEN);
     } else {
-      temp = temp.filter(x => [2, 3, 4, 5, 6].includes(x.Status));
+      temp = temp.filter(x => [JobStatus.KHONG_THUC_HIEN, JobStatus.DANG_THUC_HIEN, JobStatus.HOAN_TAT, JobStatus.NGUNG_THUC_HIEN, JobStatus.CHO_DUYET].includes(x.Status));
     }
+
     if (this.sortStatusId !== null) {
       temp.sort((a, b) => {
         const aPriority = a.Status === this.sortStatusId ? 0 : 1;
@@ -92,13 +111,16 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       temp.sort((a, b) => this.compare(a, b, this.sortField, this.sortDirection));
     }
+
     this.filteredJobs = temp;
+
     const cnt: { [key: number]: number } = {};
     this.filteredJobs.forEach(j => {
       cnt[j.Status] = (cnt[j.Status] || 0) + 1;
     });
     this.statusCounts.emit(cnt);
     this.rowCountChange.emit(this.filteredJobs.length);
+    this.statusCountsChange.emit(cnt);
   }
 
   compare(a: JobWithActionMenu, b: JobWithActionMenu, field: keyof JobWithActionMenu, dir: 'asc' | 'desc'): number {
@@ -127,17 +149,18 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getActions(s: JobStatus): string[] {
-    if (this.tableType === 'pre-onboarding') {
-      if (s === JobStatus.CHUA_THUC_HIEN) return ['Chỉnh sửa', 'Không thực hiện', 'Xóa công việc'];
-      if (s === JobStatus.KHONG_THUC_HIEN) return ['Xem chi tiết', 'Mở lại'];
-      return [];
+    let actions: string[] = [];
+    if (this.tableType === 'pre-Offboarding') {
+      if (s === JobStatus.CHUA_THUC_HIEN) actions = ['Chỉnh sửa', 'Không thực hiện', 'Xóa công việc'];
+      if (s === JobStatus.KHONG_THUC_HIEN) actions = ['Xem chi tiết', 'Mở lại'];
+    } else {
+      if (s === JobStatus.KHONG_THUC_HIEN) actions = ['Chỉnh sửa', 'Mở lại'];
+      if (s === JobStatus.DANG_THUC_HIEN) actions = ['Chỉnh sửa', 'Ngưng thực hiện', 'Gửi duyệt'];
+      if (s === JobStatus.HOAN_TAT) actions = [];
+      if (s === JobStatus.NGUNG_THUC_HIEN) actions = ['Chỉnh sửa', 'Mở lại'];
+      if (s === JobStatus.CHO_DUYET) actions = ['Xem chi tiết', 'Duyệt'];
     }
-    if (s === JobStatus.KHONG_THUC_HIEN) return ['Chỉnh sửa', 'Mở lại'];
-    if (s === JobStatus.DANG_THUC_HIEN) return ['Chỉnh sửa', 'Ngưng thực hiện', 'Gửi duyệt'];
-    if (s === JobStatus.HOAN_TAT) return [];
-    if (s === JobStatus.NGUNG_THUC_HIEN) return ['Chỉnh sửa', 'Mở lại'];
-    if (s === JobStatus.CHO_DUYET) return ['Xem chi tiết', 'Duyệt'];
-    return [];
+    return actions;
   }
 
   toggleActionMenu(job: JobWithActionMenu, i: number): void {
@@ -147,6 +170,25 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
 
   performAction(action: string, job: JobWithActionMenu): void {
     this.toggleActionMenu(job, this.filteredJobs.indexOf(job));
+    const assigneeDisplay = `${job.AssigneeName} | ${job.AssigneeID}`;
+    if (action === 'Không thực hiện') {
+      this.popupAction.openReasonPopup([assigneeDisplay]);
+    }
+    if (action === 'Ngưng thực hiện') {
+      this.popupAction.openStopPopup([assigneeDisplay]);
+    }
+    if (action === 'Mở lại') {
+      this.popupAction.openReopenPopup([assigneeDisplay]);
+    }
+    if (action === 'Thực hiện bởi') {
+      this.popupAction.openExecutorPopup([assigneeDisplay]);
+    }
+    if (action === 'Duyệt bởi') {
+      this.popupAction.openApproverPopup([assigneeDisplay]);
+    }
+    if (action === 'Duyệt') {
+      this.openPopupConfirm(job);
+    }
   }
 
   toggleSelectAll(e: any): void {
@@ -175,8 +217,8 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getStatusClass(s: JobStatus): string {
-    if (this.tableType === 'pre-onboarding') {
-      if (s === JobStatus.CHUA_THUC_HIEN) return 'status-not-yet-executed';
+    if (this.tableType === 'pre-Offboarding') {
+      if (s === JobStatus.CHUA_THUC_HIEN) return 'status-not-executed';
       if (s === JobStatus.KHONG_THUC_HIEN) return 'status-stopped';
       return '';
     }
@@ -189,34 +231,48 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get visibleButtons() {
-    if (this.tableType === 'pre-onboarding') {
-      return {
-        showNoAction: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
-        showDelete: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
-        showReopen: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN),
-        showStopAction: false,
-        showSubmit: false,
-        showComplete: false
-      };
-    }
     return {
-      showNoAction: false,
-      showDelete: false,
-      showReopen: this.selectedJobs.some(
-        x => x.Status === JobStatus.KHONG_THUC_HIEN || x.Status === JobStatus.NGUNG_THUC_HIEN
-      ),
+      showNoAction: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
+      showDelete: this.selectedJobs.some(x => x.Status === JobStatus.CHUA_THUC_HIEN),
+      showReopen: this.selectedJobs.some(x => x.Status === JobStatus.KHONG_THUC_HIEN || x.Status === JobStatus.NGUNG_THUC_HIEN),
       showStopAction: this.selectedJobs.some(x => x.Status === JobStatus.DANG_THUC_HIEN),
       showSubmit: this.selectedJobs.some(x => x.Status === JobStatus.CHO_DUYET || x.Status === JobStatus.DANG_THUC_HIEN),
-      showComplete: false
+      showComplete: false,
+      showExecutor: this.selectedJobs.length > 0,
+      showApprover: this.selectedJobs.length > 0
     };
   }
-
+  showPopupConfirm = false;
+  selectedJobToApprove: JobWithActionMenu | null = null;
+  
   checkAndOpenDeleteModal(): void {
     if (this.selectedJobs.length > 0) {
       this.isDeleteModalVisible = true;
     }
   }
-
+  openPopupConfirm(job: JobWithActionMenu): void {
+    this.selectedJobToApprove = job;
+    this.showPopupConfirm = true;
+  }
+  
+  onConfirmApproval(): void {
+    if (this.tableType === 'Offboarding') {
+      this.jobNames.forEach(job => {
+        if (job.Status === JobStatus.CHO_DUYET) {
+          job.Status = JobStatus.HOAN_TAT; 
+        }
+      });
+      this.filterJobs(); 
+      this.showPopupConfirm = false;
+    }
+  }
+  
+  
+  onCancelApproval(): void {
+    this.showPopupConfirm = false;
+    this.selectedJobToApprove = null;
+  }
+  
   confirmDelete(): void {
     const arr = this.selectedJobs.map(x => x.TaskName);
     this.jobNames = this.jobNames.filter(j => !arr.includes(j.TaskName));
@@ -242,7 +298,12 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   bulkNoAction(): void {
-    this.closeActionBar();
+    const applicableJobs = this.selectedJobs.filter(job => job.Status === JobStatus.CHUA_THUC_HIEN);
+    if (applicableJobs.length > 0) {
+      const displayNames = applicableJobs.map(job => `${job.AssigneeName} | ${job.AssigneeID}`);
+      this.popupAction.openReasonPopup(displayNames);
+      this.closeActionBar();
+    }
   }
 
   bulkDelete(): void {
@@ -250,18 +311,103 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   bulkReopen(): void {
-    this.closeActionBar();
+    if (this.selectedJobs.length > 0) {
+      const applicableJobs = this.selectedJobs.filter(
+        job => job.Status === JobStatus.KHONG_THUC_HIEN || job.Status === JobStatus.NGUNG_THUC_HIEN
+      );
+  
+      if (applicableJobs.length > 0) {
+        const displayNames = applicableJobs.map(
+          job => `${job.AssigneeName} | ${job.AssigneeID}`
+        );
+        this.popupAction.openReopenPopup(displayNames);
+        this.closeActionBar();
+      }
+    }
   }
 
   bulkStopAction(): void {
-    this.closeActionBar();
+    const applicableJobs = this.selectedJobs.filter(job => job.Status === JobStatus.DANG_THUC_HIEN);
+    if (applicableJobs.length > 0) {
+      const displayNames = applicableJobs.map(job => `${job.AssigneeName} | ${job.AssigneeID}`);
+      this.popupAction.openStopPopup(displayNames);
+      this.closeActionBar();
+    }
   }
 
   bulkSubmit(): void {
-    this.closeActionBar();
+    if (this.selectedJobs.length > 0) {
+      const displayNames = this.selectedJobs.map(job => `${job.AssigneeName} | ${job.AssigneeID}`);
+      this.popupAction.openApproverPopup(displayNames);
+      this.closeActionBar();
+    }
   }
 
   bulkComplete(): void {
     this.closeActionBar();
+  }
+
+  bulkExecutor(): void {
+    if (this.selectedJobs.length > 0) {
+      const displayNames = this.selectedJobs.map(job => `${job.AssigneeName} | ${job.AssigneeID}`);
+      this.popupAction.openExecutorPopup(displayNames);
+      this.closeActionBar();
+    }
+  }
+
+  bulkApprover(): void {
+    if (this.selectedJobs.length > 0) {
+      const displayNames = this.selectedJobs.map(job => `${job.AssigneeName} | ${job.AssigneeID}`);
+      this.popupAction.openApproverPopup(displayNames);
+      this.closeActionBar();
+    }
+  }
+
+  handleStatusUpdate(event: StatusUpdateEvent) {
+    const {
+      jobNames,
+      newStatus,
+      executor,
+      approver,
+      reasonDescription,
+      stopDescription,
+      reopenDescription
+    } = event;
+  
+    this.jobNames.forEach(job => {
+      if (jobNames.includes(`${job.AssigneeName} | ${job.AssigneeID}`)) {
+        if (executor) {
+          job.AssigneeBy = executor.position;
+          const person = this.getPeople(executor.position).find(
+            p => p.id === executor.personId
+          );
+          if (person) {
+            job.AssigneeName = person.name;
+            job.AssigneeID = person.id;
+          }
+        }
+        if (approver) {
+          job.PositionApprovedName = approver.position;
+          const person = this.getPeople(approver.position).find(
+            p => p.id === approver.personId
+          );
+          if (person) {
+            job.ApprovedName = person.name;
+            job.ApprovedID = person.id;
+          }
+        }
+  
+        if (newStatus !== undefined) {
+          job.Status = newStatus; 
+        }
+      }
+    });
+  
+    this.filterJobs();
+  }
+
+  getPeople(positionName: string): PersonDTO[] {
+    const position = this.positions.find((p: PositionDTO) => p.name === positionName);
+    return position ? position.people : [];
   }
 }

@@ -4,8 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'statusColor'
 })
 export class StatusColorPipe implements PipeTransform {
-  transform(status: number, tableType: 'pre-onboarding' | 'onboarding'): string {
-    if (tableType === 'pre-onboarding') {
+  transform(status: number, tableType: 'pre-Offboarding' | 'Offboarding'): string {
+    if (tableType === 'pre-Offboarding') {
       switch (status) {
         case 1:
         case 3:

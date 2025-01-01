@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-onboard.component.scss']
 })
 export class InfoOnboardComponent {
-  @Input() isOnboarding: boolean = false;
+  @Input() isOffboarding: boolean = false;
   @Input() disabled: boolean = false;
 }

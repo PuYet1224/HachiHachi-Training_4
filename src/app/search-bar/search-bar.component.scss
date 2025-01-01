@@ -92,7 +92,9 @@
   background-color: #fff;
   padding: 3px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
-
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 6px;
+  }
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -104,12 +106,24 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+  
     img {
       width: 13px;
       height: 13px;
       filter: grayscale(100%) brightness(0.7);
     }
+  
+    &:hover {
+      background-color: #ccc; 
+    }
+  
+    &:hover img {
+      filter: none; 
+    }
   }
+  
 
   .search-input {
     flex-grow: 1;
@@ -120,6 +134,7 @@
     outline: none;
     height: 100%;
     color: #a1a1a1;
+    cursor: pointer;
     &::placeholder {
       color: #a1a1a1;
     }

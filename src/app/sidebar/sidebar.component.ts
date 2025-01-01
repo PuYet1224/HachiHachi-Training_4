@@ -1,49 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from '../services/menu.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
   isEvaluationOpen = false;       
-  isQuestionBankOpen = false;     
-  isQuestionBankSelected = false; 
+  isEvaluationSubmenuOpen = false;     
+  selectedEvaluation: string | null = null; 
+  private subscription: Subscription = new Subscription();
 
   constructor(private menuService: MenuService) {} 
 
+  ngOnInit() {
+    this.subscription.add(
+      this.menuService.selectedMainMenu$.subscribe((menu: string | null) => {
+        if (menu !== 'nhanSu') {
+          this.isEvaluationOpen = false;
+          this.isEvaluationSubmenuOpen = false;
+          this.selectedEvaluation = null;
+          return;
+        }
+
+        // Optionally toggle based on some condition or keep it open
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   toggleEvaluation() {
-    this.menuService.selectedMainMenu$.subscribe((menu: string | null) => {
-      if (menu !== 'nhanSu') {
-        this.isEvaluationOpen = false;
-        this.isQuestionBankOpen = false;
-        this.isQuestionBankSelected = false;
-        return;
-      }
-
-      this.isEvaluationOpen = !this.isEvaluationOpen;
-      if (!this.isEvaluationOpen) {
-        this.isQuestionBankOpen = false;
-        this.isQuestionBankSelected = false;
-        this.menuService.selectSubMenu(null);
-      }
-    });
+    this.isEvaluationOpen = !this.isEvaluationOpen;
+    if (!this.isEvaluationOpen) {
+      this.isEvaluationSubmenuOpen = false;
+      this.selectedEvaluation = null;
+      this.menuService.selectSubMenu(null);
+    }
   }
 
-  toggleQuestionBank() {
-    this.isQuestionBankOpen = !this.isQuestionBankOpen;
-    if (!this.isQuestionBankOpen) {
-      this.isQuestionBankSelected = false;
+  toggleEvaluationSubmenu() {
+    this.isEvaluationSubmenuOpen = !this.isEvaluationSubmenuOpen;
+    if (!this.isEvaluationSubmenuOpen) {
+      this.selectedEvaluation = null;
       this.menuService.selectSubMenu(null); 
     }
   }
 
-  selectQuestionBank() {
-    this.isQuestionBankSelected = !this.isQuestionBankSelected;
-    if (this.isQuestionBankSelected) {
-      this.menuService.selectSubMenu('nganHangCauHoi'); 
-    } else {
-      this.menuService.selectSubMenu(null); 
-    }
+  selectEvaluation(evaluation: string) {
+    this.selectedEvaluation = evaluation;
+    this.menuService.selectSubMenu(evaluation); 
   }
 }

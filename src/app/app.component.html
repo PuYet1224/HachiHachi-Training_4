@@ -1,10 +1,11 @@
 <app-sidebar></app-sidebar>
 <div class="main-container">
   <app-header1></app-header1>
-  <app-onboard [disabled]="isDisabled" (toggleOnboarding)="switchTable($event)"></app-onboard>
+  <app-onboard [disabled]="isDisabled" (toggleOffboarding)="switchTable($event)"></app-onboard>
   <app-job-overview
     [disabled]="isDisabled"
     [tableType]="currentTable"
+    [statusCounts]="statusCounts"
     (statusClicked)="onStatusClicked($event)"
   ></app-job-overview>
   <app-search-bar [disabled]="isDisabled" (searchQuery)="onSearchQuery($event)"></app-search-bar>

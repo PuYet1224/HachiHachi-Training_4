@@ -8,9 +8,9 @@ import { MOCK_JOB_NAMES } from '../data/mock-data';
 })
 export class JobOverviewComponent implements OnInit, OnChanges {
   @Input() disabled: boolean = false;
-  @Input() tableType: 'pre-onboarding' | 'onboarding' = 'pre-onboarding';
+  @Input() tableType: 'pre-Offboarding' | 'Offboarding' = 'pre-Offboarding';
   @Output() statusClicked = new EventEmitter<number>();
-  statusCounts: { [key: number]: number } = {};
+  @Input() statusCounts: { [key: number]: number } = {};
 
   ngOnInit(): void {
     this.calculateStatusCounts();
@@ -25,7 +25,7 @@ export class JobOverviewComponent implements OnInit, OnChanges {
   calculateStatusCounts(): void {
     this.statusCounts = {};
     MOCK_JOB_NAMES.forEach(job => {
-      if (this.tableType === 'pre-onboarding') {
+      if (this.tableType === 'pre-Offboarding') {
         if (![1, 2].includes(job.Status)) return;
       } else {
         if (![1, 2, 3, 4, 5, 6].includes(job.Status)) return;

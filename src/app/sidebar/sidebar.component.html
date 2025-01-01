@@ -32,19 +32,30 @@
 
     <div class="option"
          *ngIf="isEvaluationOpen"
-         [class.open]="isQuestionBankOpen"
-         (click)="toggleQuestionBank()">
+         [class.open]="isEvaluationSubmenuOpen"
+         (click)="toggleEvaluationSubmenu()">
       <div></div>
       <img src="../../assets/copy.png" alt="" class="icon-bars"/>
-      <h1>ĐÁNH GIÁ NHÂN SỰ</h1>
+      <h1>OFFBOARD</h1>
     </div>
 
-    <ul class="question"
-        *ngIf="isEvaluationOpen && isQuestionBankOpen"
-        [class.selected]="isQuestionBankSelected"
-        (click)="selectQuestionBank()">
-      <div></div>
-      <li>Ngân hàng câu hỏi</li>
+    <ul class="evaluation-list"
+        *ngIf="isEvaluationOpen && isEvaluationSubmenuOpen">
+      <li
+        [class.selected]="selectedEvaluation === 'prepare'"
+        (click)="selectEvaluation('prepare')">
+        Chuẩn bị Offboarding
+      </li>
+      <li
+        [class.selected]="selectedEvaluation === 'offboarding'"
+        (click)="selectEvaluation('offboarding')">
+        Offboarding
+      </li>
+      <li
+        [class.selected]="selectedEvaluation === 'offboarded'"
+        (click)="selectEvaluation('offboarded')">
+        Offboarded
+      </li>
     </ul>
   </div>
 </div>

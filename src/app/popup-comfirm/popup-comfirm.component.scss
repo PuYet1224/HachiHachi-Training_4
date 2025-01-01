@@ -1,0 +1,70 @@
+@import "src/styles";
+
+.popup-confirm {
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: white;
+    text-align: center;
+    font-family: $primary-font;
+  
+    .popup-header {
+      background-color: #1A6634;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 16px;
+    }
+  
+    .popup-body {
+      padding: 20px;
+      font-size: 14px;
+      color: #333;
+  
+      .task {
+        color: #1976d2;
+        font-weight: bold;
+      }
+  
+      .user {
+        color: #1A6634;
+        font-weight: bold;
+      }
+    }
+  
+    .popup-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+  
+      button {
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+  
+        &.cancel-button {
+          background-color: #e0e0e0;
+          color: #333;
+          transition: background-color 0.3s;
+  
+          &:hover {
+            background-color: #d6d6d6;
+          }
+        }
+  
+        &.confirm-button {
+          background-color: #1A6634;
+          color: white;
+          transition: background-color 0.3s;
+  
+          &:hover {
+            background: darken(#1A6634, 10%);
+        }
+        }
+      }
+    }
+  }
+  
