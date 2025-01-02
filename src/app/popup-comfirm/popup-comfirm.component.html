@@ -1,9 +1,16 @@
-<div class="popup-confirm">
-    <div class="popup-header">DUYỆT CÔNG VIỆC</div>
+<div class="modal-overlay">
+  <div class="popup-confirm">
+    <div class="popup-header" [ngClass]="getHeaderClass()">
+      {{ getTitle() }}
+    </div>
     <div class="popup-body">
       <p>
-        Bạn chắc chắn muốn duyệt công việc <span class="task">Hoàn tất hồ sơ</span>
-        cho <span class="user">Nguyễn Văn A - H0001</span>
+        Bạn chắc chắn muốn
+        <span class="highlight-action">{{ getActionText() }}</span>
+        <span> công việc </span>
+        <span class="task">{{ displayJobNames }}</span>
+        <span> cho </span>
+        <span class="user">{{ displayUsers }}</span>
       </p>
     </div>
     <div class="popup-footer">
@@ -11,4 +18,4 @@
       <button class="confirm-button" (click)="onConfirm()">XÁC NHẬN</button>
     </div>
   </div>
-  
+</div>

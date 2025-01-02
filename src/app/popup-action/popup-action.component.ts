@@ -149,7 +149,8 @@ export class PopupActionComponent {
     this.statusUpdated.emit({
       jobNames: this.currentJobNames,
       newStatus: JobStatus.KHONG_THUC_HIEN,
-      reasonDescription: this.selectedReason === 'Khác' ? this.reasonDescription : undefined
+      reasonDescription:
+        this.selectedReason === 'Khác' ? this.reasonDescription : undefined
     });
     this.closePopup();
   }
@@ -162,7 +163,8 @@ export class PopupActionComponent {
     this.statusUpdated.emit({
       jobNames: this.currentJobNames,
       newStatus: JobStatus.NGUNG_THUC_HIEN,
-      stopDescription: this.selectedStopReason === 'Khác' ? this.stopDescription : undefined
+      stopDescription:
+        this.selectedStopReason === 'Khác' ? this.stopDescription : undefined
     });
     this.closePopup();
   }
@@ -172,23 +174,21 @@ export class PopupActionComponent {
       alert('Vui lòng nhập mô tả lý do!');
       return;
     }
-
     let newStatus: JobStatus;
-
     if (this.tableType === 'pre-Offboarding') {
-      newStatus = JobStatus.CHUA_THUC_HIEN; 
+      newStatus = JobStatus.CHUA_THUC_HIEN;
     } else {
-      newStatus = JobStatus.DANG_THUC_HIEN; 
+      newStatus = JobStatus.DANG_THUC_HIEN;
     }
-
     this.statusUpdated.emit({
       jobNames: this.currentJobNames,
       newStatus,
-      reopenDescription: this.selectedReopenReason === 'Khác' ? this.reopenDescription : undefined
+      reopenDescription:
+        this.selectedReopenReason === 'Khác' ? this.reopenDescription : undefined
     });
     this.closePopup();
-}
-  
+  }
+
   confirmExecutor() {
     if (!this.selectedExecutorPosition || !this.selectedExecutorPerson) {
       alert('Vui lòng chọn chức danh và người thực hiện!');
