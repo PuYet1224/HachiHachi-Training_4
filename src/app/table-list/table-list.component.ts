@@ -204,12 +204,12 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     this.activeActionMenuId = this.activeActionMenuId === id ? null : id;
   }
 
-  // ===> CHỈNH SỬA TẠI ĐÂY <===
-  // Thay vì gọi thẳng onConfirmXYZ(), hãy mở popupConfirm để người dùng xác nhận
-  performAction(action: string, job: JobWithActionMenu): void {
-    this.toggleActionMenu(job, this.filteredJobs.indexOf(job));
-
-    // Các action khác vẫn gọi popupAction bình thường
+  performAction(action: string, job: JobWithActionMenu, fromActionMenu: boolean = true): void {
+    if (fromActionMenu) {
+      this.toggleActionMenu(job, this.filteredJobs.indexOf(job));
+    }
+  
+    // popup-action
     const assigneeDisplay = `${job.AssigneeName} | ${job.AssigneeID}`;
     if (action === 'Không thực hiện') {
       this.popupAction.openReasonPopup([assigneeDisplay]);
@@ -226,8 +226,8 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     if (action === 'Duyệt bởi') {
       this.popupAction.openApproverPopup([assigneeDisplay]);
     }
-
-    // Các action cần confirm:
+  
+    // popup-confirm:
     if (action === 'Duyệt') {
       this.openPopupConfirm('approve', [job.TaskName]);
     }
@@ -237,7 +237,7 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     if (action === 'Xóa công việc') {
       this.openPopupConfirm('delete', [job.TaskName]);
     }
-  }
+  }  
 
   toggleSelectAll(e: any): void {
     this.allSelected = e.target.checked;
@@ -338,14 +338,22 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  // Trước đây: this.onConfirmDelete();
   bulkDelete(): void {
-    const jobNames = this.selectedJobs.map(job => job.TaskName);
-    this.openPopupConfirm('delete', jobNames); // mở popup Xác Nhận Xóa
+    const deletableJobs = this.selectedJobs.filter(
+      job => job.Status === JobStatus.CHUA_THUC_HIEN
+    );
+  
+    const jobNames = deletableJobs.map(job => job.TaskName);
+  
+    if (jobNames.length > 0) {
+      this.openPopupConfirm('delete', jobNames);
+    } else {
+      alert('Không có công việc nào có thể xóa.');
+    }
+  
     this.closeActionBar();
   }
-
-  // Trước đây: this.onConfirmSubmit();
+  
   bulkReopen(): void {
     const applicableJobs = this.selectedJobs.filter(
       job =>
@@ -361,11 +369,10 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  // Trước đây: this.onConfirmSubmit();
   bulkSubmit(): void {
     if (this.selectedJobs.length > 0) {
       const jobNames = this.selectedJobs.map(job => job.TaskName);
-      this.openPopupConfirm('submit', jobNames); // mở popup Xác Nhận Gửi Duyệt
+      this.openPopupConfirm('submit', jobNames); 
       this.closeActionBar();
     }
   }
@@ -396,23 +403,48 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     this.actionBarOpened.emit(false);
   }
 
-  // ===> CHỈNH SỬA TẠI ĐÂY <===
-  // Hàm mở popupConfirm (chỉ set showPopupConfirm = true + confirmActionType)
   openPopupConfirm(
     actionType: 'approve' | 'submit' | 'delete',
     jobNames: string[]
   ): void {
     this.selectedJobNames = jobNames;
     this.selectedJobUsers =
-      jobNames.length === 1 ? ['Nguyễn Văn A - H0001'] : [`${jobNames.length} người`];
-
+      jobNames.length === 1 ? ['Nguyễn Văn A - H0001'] : [`${jobNames.length} công việc`];
+  
     this.confirmActionType = actionType;
     this.showPopupConfirm = true;
-  }
+  }  
 
-  // Các hàm Xác nhận / Hủy — thực sự thay đổi dữ liệu khi user nhấn "XÁC NHẬN" trong popup
+  onStatusIconClick(event: Event, job: JobWithActionMenu, iconIndex: number): void {
+    event.stopPropagation(); 
+    let action: string | null = null;
+    
+    if (this.tableType === 'Offboarding') {
+      if (job.Status === JobStatus.CHO_DUYET && iconIndex === 0) {
+        action = 'Duyệt';
+      } else if (job.Status === JobStatus.DANG_THUC_HIEN) {
+        if (iconIndex === 0) {
+          action = 'Gửi duyệt';
+        } else if (iconIndex === 1) {
+          action = 'Ngưng thực hiện';
+        }
+      } else if (job.Status === JobStatus.NGUNG_THUC_HIEN && iconIndex === 0) {
+        action = 'Mở lại';
+      }
+    } else if (this.tableType === 'pre-Offboarding') {
+      if (job.Status === JobStatus.CHUA_THUC_HIEN && iconIndex === 0) {
+        action = 'Không thực hiện';
+      } else if (job.Status === JobStatus.KHONG_THUC_HIEN && iconIndex === 0) {
+        action = 'Mở lại';
+      }
+    }
+  
+    if(action) {
+      this.performAction(action, job, false);
+    }
+  }  
+  
   onConfirmApproval(): void {
-    // logic phê duyệt
     this.jobNames = this.jobNames.map(job => {
       if (
         this.selectedJobNames.includes(job.TaskName) &&
@@ -462,13 +494,14 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onConfirmDelete(): void {
-    // logic xóa
     this.jobNames = this.jobNames.filter(
       job => !this.selectedJobNames.includes(job.TaskName)
     );
+  
     this.selectedJobs = this.selectedJobs.filter(
       job => !this.selectedJobNames.includes(job.TaskName)
     );
+  
     this.allSelected = false;
     this.showPopupConfirm = false;
     this.confirmActionType = null;
@@ -485,7 +518,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedJobUsers = [];
   }
 
-  // Hàm xử lý event từ popupAction (reason, reopen, ...)
   handleStatusUpdate(event: StatusUpdateEvent) {
     const { jobNames, newStatus, executor, approver } = event;
     this.jobNames.forEach(job => {
@@ -512,7 +544,6 @@ export class TableListComponent implements OnInit, OnDestroy, OnChanges {
         }
         if (newStatus !== undefined) {
           job.Status = newStatus;
-          // đồng bộ giữa pre-Offboarding / Offboarding nếu cần
           if (
             this.tableType === 'pre-Offboarding' &&
             newStatus === JobStatus.KHONG_THUC_HIEN

@@ -9,8 +9,8 @@ export class JobIconService {
 
   getIcons(tableType: 'pre-Offboarding' | 'Offboarding', status: number): string[] {
     if (tableType === 'pre-Offboarding') {
-      if (status === JobStatus.CHUA_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
-      if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}ban.png`];
+      if (status === JobStatus.CHUA_THUC_HIEN) return [`${this.basePath}ban.png`];
+      if (status === JobStatus.KHONG_THUC_HIEN) return [`${this.basePath}circle_arrow.png`];
       return [];
     } else {
       if (status === JobStatus.DANG_THUC_HIEN) return [`${this.basePath}send.png`, `${this.basePath}ban.png`];

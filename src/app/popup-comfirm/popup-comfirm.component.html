@@ -1,21 +1,39 @@
 <div class="modal-overlay">
-  <div class="popup-confirm">
-    <div class="popup-header" [ngClass]="getHeaderClass()">
-      {{ getTitle() }}
+  <div class="modal">
+    <div class="modal-header" [ngClass]="getHeaderClass()">
+      <img src="../../assets/warning.png" alt="Warning" class="warning-icon" />
+      <span class="header-title">{{ getTitle() }}</span>
     </div>
-    <div class="popup-body">
-      <p>
-        Bạn chắc chắn muốn
-        <span class="highlight-action">{{ getActionText() }}</span>
-        <span> công việc </span>
-        <span class="task">{{ displayJobNames }}</span>
-        <span> cho </span>
-        <span class="user">{{ displayUsers }}</span>
+    <div class="modal-body">
+      <p class="action-text">
+        {{ getActionMessage() }}
       </p>
+      <div class="job-section" title="{{ jobNames.length > 1 ? jobNames.join(', ') : displayJobNames }}">
+        <span class="job-name">
+          {{ displayJobNames }}
+        </span>
+        <span *ngIf="jobNames.length > 1" class="more-jobs">...</span>
+      </div>
+      <span class="warning-text" *ngIf="isDeleteAction()">
+        Công việc bị xóa sẽ <strong>KHÔNG</strong> thể khôi phục lại.
+      </span>
     </div>
-    <div class="popup-footer">
-      <button class="cancel-button" (click)="onCancel()">HỦY BỎ</button>
-      <button class="confirm-button" (click)="onConfirm()">XÁC NHẬN</button>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="onCancel()">
+        {{ getCancelButtonText() }}
+      </button>
+      <button
+        [ngClass]="getConfirmButtonClass()"
+        (click)="onConfirm()"
+      >
+        <img
+          *ngIf="isDeleteAction()"
+          src="../../assets/trash.png"
+          alt="Trash"
+          class="icon-trash"
+        />
+        {{ getConfirmButtonText() }}
+      </button>
     </div>
   </div>
 </div>

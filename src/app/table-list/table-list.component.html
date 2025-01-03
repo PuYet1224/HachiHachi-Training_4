@@ -184,12 +184,16 @@
           <td>Hết ngày: {{ job.EndDate }}</td>
           <td>{{ jobStatusService.getStatus(tableType, job.Status) }}</td>
           <td>
-            <ng-container
-              *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status)"
-            >
-              <img [src]="icon" alt="Icon" class="status-icon" />
+            <ng-container *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status); let idx = index">
+              <img 
+                [src]="icon" 
+                alt="Icon" 
+                class="status-icon" 
+                (click)="onStatusIconClick($event, job, idx)" 
+                style="cursor: pointer;"
+              />
             </ng-container>
-          </td>
+          </td>                           
           <td class="action-cell">
             <img
               src="../../assets/three-dots.png"

@@ -14,46 +14,97 @@ export class PopupComfirmComponent {
 
   get displayJobNames(): string {
     return this.jobNames.length === 1
-      ? this.jobNames[0]
-      : `${this.jobNames.length} công việc`;
+      ? this.jobNames[0] 
+      : this.jobNames[0]; 
   }
 
-  get displayUsers(): string {
-    // Tuỳ bạn, ví dụ fix cứng 'Nguyễn Văn A - H0001'
-    // hoặc hiển thị bao nhiêu user cũng được
-    return this.jobNames.length === 1
-      ? 'Nguyễn Văn A - H0001'
-      : `${this.jobNames.length} người`;
+  getAdditionalJobNames(): string {
+    if (this.jobNames.length > 1) {
+      return this.jobNames.slice(1).join(', '); 
+    }
+    return '';
   }
 
-  // Hàm đổi nội dung title dựa trên actionType
   getTitle(): string {
     switch (this.actionType) {
-      case 'delete':  return 'XÓA CÔNG VIỆC';
-      case 'submit':  return 'GỬI DUYỆT CÔNG VIỆC';
-      case 'approve': return 'DUYỆT CÔNG VIỆC';
-      default:        return 'XÁC NHẬN';
+      case 'delete':  
+        return 'XÓA CÔNG VIỆC';
+      case 'submit':  
+        return 'GỬI DUYỆT CÔNG VIỆC';
+      case 'approve': 
+        return 'DUYỆT CÔNG VIỆC';
+      default:        
+        return 'XÁC NHẬN';
     }
   }
 
-  // Hàm đổi text hành động ở câu "Bạn chắc chắn muốn ... công việc ..."
-  getActionText(): string {
+  getActionMessage(): string {
     switch (this.actionType) {
-      case 'delete':  return 'xóa';
-      case 'submit':  return 'gửi duyệt';
-      case 'approve': return 'duyệt';
-      default:        return '';
+      case 'delete':
+        return 'Bạn chắc chắn muốn xóa công việc';
+      case 'submit':
+        return 'Bạn chắc chắn muốn gửi duyệt công việc';
+      case 'approve':
+        return 'Bạn chắc chắn muốn duyệt công việc';
+      default:
+        return 'Bạn chắc chắn muốn thực hiện hành động này';
     }
   }
 
-  // Đổi class cho header (nếu muốn tuỳ biến màu sắc)
+  getCancelButtonText(): string {
+    switch (this.actionType) {
+      case 'delete':
+        return 'KHÔNG XÓA';
+      case 'submit':
+        return 'KHÔNG GỬI';
+      case 'approve':
+        return 'KHÔNG DUYỆT';
+      default:
+        return 'ĐÓNG';
+    }
+  }
+
+  getConfirmButtonText(): string {
+    switch (this.actionType) {
+      case 'delete':
+        return 'XÓA';
+      case 'submit':
+        return 'GỬI';
+      case 'approve':
+        return 'DUYỆT';
+      default:
+        return 'XÁC NHẬN';
+    }
+  }
+
   getHeaderClass(): string {
     switch (this.actionType) {
-      case 'delete':  return 'delete';
-      case 'submit':  return 'submit';
-      case 'approve': return 'approve';
-      default:        return '';
+      case 'delete':  
+        return 'delete';
+      case 'submit':  
+        return 'submit';
+      case 'approve': 
+        return 'approve';
+      default:        
+        return '';
     }
+  }
+
+  getConfirmButtonClass(): string {
+    switch (this.actionType) {
+      case 'delete':  
+        return 'delete-btn';
+      case 'submit':  
+        return 'submit-btn';
+      case 'approve': 
+        return 'approve-btn';
+      default:        
+        return 'confirm-btn';
+    }
+  }
+
+  isDeleteAction(): boolean {
+    return this.actionType === 'delete';
   }
 
   onConfirm(): void {
