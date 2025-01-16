@@ -1,0 +1,119 @@
+<div class="drawer-modal">
+  <div class="drawer-container">
+    <h3><i class="fa fa-info-circle"></i> {{ headerText }}</h3>
+    <form *ngIf="localJob">
+      <div class="form-group">
+        <label>Tên công việc <span class="required" *ngIf="mode==='edit' && localJob.Status !== 2">(*)</span></label>
+        <input type="text" name="taskName" [(ngModel)]="localJob.TaskName" [disabled]="mode==='view' || editingDisabled('taskName')" />
+        <span class="policy-text">Ngoài chính sách</span>
+      </div>
+      <div class="form-group">
+        <label>Mô tả công việc</label>
+        <textarea name="description" [(ngModel)]="localJob.Description" [disabled]="mode==='view' || editingDisabled('description')"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Thứ tự</label>
+        <input type="number" name="orderBy" [(ngModel)]="localJob.OrderBy" [disabled]="mode==='view' || editingDisabled('orderBy')" />
+      </div>
+      <div class="form-group">
+        <label>Chức danh thực hiện</label>
+        <select name="positionAssignee" [ngModel]="getSelectedAssigneePosition()" (ngModelChange)="onAssigneePositionChange($event)" [disabled]="mode==='view'">
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let pos of positions" [value]="pos.id">{{ pos.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Thực hiện bởi <span class="required" *ngIf="mode==='edit' && !viewOnly() && localJob.Status !== 4">(*)</span></label>
+        <select name="assignee" [(ngModel)]="localJob.AssigneeID" (ngModelChange)="onAssigneeChange($event)" [disabled]="editingDisabled('assignee')">
+          <option [ngValue]="''">-- Chọn --</option>
+          <option *ngFor="let emp of assigneeCandidates" [ngValue]="emp.staffId">{{ emp.name }} | {{ emp.staffId }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="date-label">Hoàn tất hết ngày <span class="required" *ngIf="mode==='edit' && !viewOnly() && localJob.Status !== 4">(*)</span></label>
+        <div class="date-input-container">
+          <input type="date" name="endDate" [(ngModel)]="localJob.EndDate" [min]="today" [disabled]="mode==='view' || editingDisabled('endDate')" />
+          <button type="button" class="calendar-icon-btn" (click)="triggerDatePicker()" [disabled]="mode==='view'">
+            <img src="assets/calendar.png" alt="Calendar" />
+          </button>
+          <span *ngIf="localJob && isOverdue(localJob)" class="overdue-days">
+            Quá hạn: {{ getOverdueDays(localJob.EndDate) }} ngày
+          </span>
+        </div>
+      </div>
+      <ng-container *ngIf="tableType === 'Offboarding'">
+        <div class="form-group">
+          <label>Loại nhân sự áp dụng</label>
+          <select name="staffType" [(ngModel)]="localJob.ListOfTypeStaff[0]" [disabled]="mode === 'view'">
+            <option value="">-- Chọn --</option>
+            <option [ngValue]="'Type1'">Nhân viên chính thức</option>
+            <option [ngValue]="'Type2'">Không chính thức</option>
+          </select>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="tableType !== 'Offboarding'">
+        <div class="form-group">
+          <label>Chức danh phê duyệt</label>
+          <select name="positionApproved" [ngModel]="getSelectedApprovedPosition()" (ngModelChange)="onApprovedPositionChange($event)" [disabled]="mode==='view'">
+            <option value="">-- Chọn --</option>
+            <option *ngFor="let pos of positions" [value]="pos.id">{{ pos.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Duyệt bởi <span class="required" *ngIf="mode==='edit' && !viewOnly() && localJob.Status !== 4">(*)</span></label>
+          <select name="approved" [(ngModel)]="localJob.ApprovedID" (ngModelChange)="onApprovedChange($event)" [disabled]="editingDisabled('approved')">
+            <option [ngValue]="''">-- Chọn --</option>
+            <option *ngFor="let emp of approvedCandidates" [ngValue]="emp.staffId">{{ emp.name }} | {{ emp.staffId }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="form-group">
+        <label>Ghi chú <span class="required" *ngIf="mode==='edit'">(*)</span></label>
+        <input name="remark" [(ngModel)]="localJob.Remark" [disabled]="mode==='view' || editingDisabled('remark')" />
+      </div>
+      <div class="form-group">
+        <label>Trạng thái</label>
+        <select name="status" [(ngModel)]="localJob.Status" [disabled]="statusDisabled()">
+          <ng-container *ngIf="isNew; else defaultStatusOptions">
+            <ng-container *ngIf="tableType === 'pre-Offboarding'; else offboardingOption">
+              <option [ngValue]="1">Chưa thực hiện</option>
+              <option [ngValue]="2">Không thực hiện</option>
+            </ng-container>
+            <ng-template #offboardingOption>
+              <option [ngValue]="3">Đang thực hiện</option>
+            </ng-template>
+          </ng-container>
+          <ng-template #defaultStatusOptions>
+            <option [ngValue]="1">Chưa thực hiện</option>
+            <option [ngValue]="2">Không thực hiện</option>
+            <option [ngValue]="3">Đang thực hiện</option>
+            <option [ngValue]="4">Hoàn tất</option>
+            <option [ngValue]="5">Ngưng thực hiện</option>
+            <option [ngValue]="6">Chờ duyệt</option>
+          </ng-template>
+        </select>
+      </div>
+      <ng-container *ngIf="tableType !== 'Offboarding' && localJob && localJob.Status !== 1">
+        <div class="form-group">
+          <label>Lý do không thực hiện công việc</label>
+          <select name="reason" [(ngModel)]="localJob.Reason" (change)="onReasonChange()" [disabled]="viewOnly()">
+            <option [value]="0">--Chọn lý do--</option>
+            <option [value]="1">Vấn đề sức khỏe</option>
+            <option [value]="2">Vấn đề gia đình</option>
+            <option [value]="3">Lý do khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mô tả lý do <span class="required" *ngIf="localJob.Reason === 3 && mode==='edit'">(*)</span></label>
+          <textarea name="reasonDescription" [(ngModel)]="localJob.ReasonDescription" [disabled]="viewOnly() || isReasonDescriptionDisabled()"></textarea>
+        </div>
+      </ng-container>
+      <div class="drawer-buttons">
+        <button type="button" (click)="onClose()">Đóng</button>
+        <button type="button" *ngIf="mode==='edit'" (click)="onSave()">
+          {{ isNew ? 'THÊM MỚI' : 'CẬP NHẬT' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

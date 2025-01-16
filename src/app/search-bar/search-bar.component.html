@@ -1,0 +1,39 @@
+<div class="search-bar" [class.disabled]="disabled">
+  <h4 class="search-title">DANH SÁCH CÔNG VIỆC CẦN THỰC HIỆN</h4>
+  <div class="search-actions">
+    <div class="input-wrapper">
+      <div class="input-icon">
+        <img src="../../assets/glass.png" alt="Search Icon" class="search-icon-input" />
+      </div>
+      <input
+        type="text"
+        placeholder="Tìm theo tên công việc, mô tả, thực hiện bởi"
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearchClick()"
+        [disabled]="disabled"
+        required
+      />
+      <div class="close-icon" *ngIf="searchTerm" (click)="clearSearch()">
+        <img src="../../assets/close.png" alt="Clear Icon" />
+      </div>
+    </div>
+    <button class="search-btn" (click)="onSearchClick()" [disabled]="disabled">
+      <img src="../../assets/glass.png" alt="Search Icon" class="button-icon" />
+      Tìm
+    </button>
+    <div class="checkbox-wrapper">
+      <input 
+        type="checkbox" 
+        id="showStopped" 
+        [(ngModel)]="showStopped" 
+        (change)="onShowStoppedChange()"
+        [disabled]="disabled" />
+      <label for="showStopped">Hiển thị ngưng/không thực hiện công việc</label>
+    </div>
+    <button class="add-btn" (click)="onAddNewClick()" [disabled]="disabled">
+      <img src="../../assets/plus.png" alt="Plus Icon" class="button-icon" />
+      THÊM MỚI
+    </button>
+  </div>
+</div>

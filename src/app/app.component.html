@@ -1,0 +1,36 @@
+<!-- src/app/app.component.html -->
+<app-sidebar></app-sidebar>
+<div class="main-container">
+  <app-header1></app-header1>
+
+  <app-onboard 
+    [disabled]="isDisabled" 
+    [jobNames]="jobNames" 
+    (toggleOffboarding)="onToggleOffboarding($event)">
+  </app-onboard>
+
+  <app-job-overview
+    [disabled]="isDisabled"
+    [tableType]="currentTable"
+    [statusCounts]="statusCounts"
+    (statusClicked)="onStatusClicked($event)">
+  </app-job-overview>
+
+  <app-search-bar
+    [disabled]="isDisabled"
+    [tableType]="currentTable"
+    (searchQuery)="onSearchQuery($event)"
+    (addNewClicked)="openAddNewDrawer()"
+    (showStoppedChanged)="onShowStoppedChanged($event)">
+  </app-search-bar>
+
+  <app-table-list
+    [searchTerm]="searchTerm"
+    [tableType]="currentTable"
+    [sortStatusId]="currentSortStatusId"
+    (actionBarOpened)="onActionBarOpened($event)"
+    (rowCountChange)="rowCount = $event"
+    (statusCounts)="onStatusCounts($event)"
+    (jobNamesChange)="onJobNamesChange($event)">
+  </app-table-list>
+</div>

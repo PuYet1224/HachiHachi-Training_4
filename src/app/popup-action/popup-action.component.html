@@ -1,0 +1,232 @@
+<div
+  class="modal-overlay"
+  *ngIf="
+    isPopupReasonVisible ||
+    isPopupStopVisible ||
+    isPopupReopenVisible ||
+    isPopupExecutorVisible ||
+    isPopupApproverVisible
+  "
+>
+  <div class="popup-container" id="popup-reason" *ngIf="isPopupReasonVisible">
+    <div class="popup-header">
+      <h3>KHÔNG THỰC HIỆN CÔNG VIỆC</h3>
+    </div>
+    <div class="popup-content">
+      <p>
+        Hãy nêu lý do tại sao nhân sự
+        <span title="Nguyen Van A" class="highlighted">Nguyen Van A</span>
+        không phải thực hiện công việc này
+      </p>
+      <div class="form-group">
+        <label for="reason">Lý do không thực hiện công việc này</label>
+        <select
+          id="reason"
+          [(ngModel)]="selectedReason"
+          [ngClass]="{ 'placeholder-selected': !reasonTouched && !selectedReason }"
+          (change)="onReasonChange('reason')"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let reason of reasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="reason-description">
+          Mô tả lý do
+          <span *ngIf="selectedReason === 'Khác'" class="required">*</span>
+        </label>
+        <input
+          id="reason-description"
+          [(ngModel)]="reasonDescription"
+          placeholder="Nhập mô tả lý do..."
+          type="text"
+          [required]="selectedReason === 'Khác'"
+        />
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-cancel" (click)="closePopup()">Đóng</button>
+      <button class="btn-confirm" (click)="confirmReason()">Xác nhận</button>
+    </div>
+  </div>
+
+  <div class="popup-container" id="popup-stop" *ngIf="isPopupStopVisible">
+    <div class="popup-header">
+      <h3>NGƯNG THỰC HIỆN CÔNG VIỆC</h3>
+    </div>
+    <div class="popup-content">
+      <p>
+        Hãy nêu lý do tại sao ngưng thực hiện công việc này đối với nhân sự
+        <span title="Nguyen Van A" class="highlighted">Nguyen Van A</span>
+      </p>
+      <div class="form-group">
+        <label for="stop-reason">Lý do ngưng thực hiện</label>
+        <select
+          id="stop-reason"
+          [(ngModel)]="selectedStopReason"
+          [ngClass]="{ 'placeholder-selected': !stopTouched && !selectedStopReason }"
+          (change)="onReasonChange('stop')"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let reason of stopReasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="stop-description">
+          Mô tả lý do
+          <span *ngIf="selectedStopReason === 'Khác'" class="required">*</span>
+        </label>
+        <input
+          id="stop-description"
+          [(ngModel)]="stopDescription"
+          placeholder="Nhập mô tả lý do..."
+          type="text"
+          [required]="selectedStopReason === 'Khác'"
+        />
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-cancel" (click)="closePopup()">Đóng</button>
+      <button class="btn-confirm" (click)="confirmStop()">Xác nhận</button>
+    </div>
+  </div>
+
+  <div class="popup-container" id="popup-reopen" *ngIf="isPopupReopenVisible">
+    <div class="popup-header">
+      <h3>MỞ LẠI CÔNG VIỆC</h3>
+    </div>
+    <div class="popup-content">
+      <p>
+        Hãy nêu lý do tại sao cần mở lại công việc này đối với nhân sự
+        <span title="Nguyen Van A" class="highlighted">Nguyen Van A</span>
+      </p>
+      <div class="form-group">
+        <label for="reopen-reason">Lý do mở lại</label>
+        <select
+          id="reopen-reason"
+          [(ngModel)]="selectedReopenReason"
+          [ngClass]="{ 'placeholder-selected': !reopenTouched && !selectedReopenReason }"
+          (change)="onReasonChange('reopen')"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let reason of reopenReasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="reopen-description">
+          Mô tả lý do
+          <span *ngIf="selectedReopenReason === 'Khác'" class="required">*</span>
+        </label>
+        <input
+          id="reopen-description"
+          [(ngModel)]="reopenDescription"
+          placeholder="Nhập mô tả lý do..."
+          type="text"
+          [required]="selectedReopenReason === 'Khác'"
+        />
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-cancel" (click)="closePopup()">Đóng</button>
+      <button class="btn-confirm" (click)="confirmReopen()">Xác nhận</button>
+    </div>
+  </div>
+
+  <div class="popup-container executor-approver" id="popup-executor" *ngIf="isPopupExecutorVisible">
+    <div class="popup-header">
+      <h3>THỰC HIỆN BỞI</h3>
+    </div>
+    <div class="popup-content">
+      <p class="update-info" *ngIf="executorJobNames.length > 1" [title]="executorJobNames.join(', ')">
+        Bạn đang cập nhật cho
+        <span class="job-count">{{ executorJobNames.length }}</span>
+        công việc
+      </p>
+      <p class="update-info" *ngIf="executorJobNames.length === 1">
+        Bạn đang cập nhật cho công việc
+        <span class="job-name-single">{{ executorJobNames[0] }}</span>
+      </p>
+      <div class="form-group">
+        <label for="executor-position">Chức danh thực hiện</label>
+        <select
+          id="executor-position"
+          [(ngModel)]="selectedExecutorPosition"
+          [ngClass]="{ 'placeholder-selected': !executorTouched && !selectedExecutorPosition }"
+          (change)="onReasonChange('executor')"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let position of allowedExecutorPositions" [value]="position.name">
+            {{ position.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="executor-person">Thực hiện bởi</label>
+        <select
+          id="executor-person"
+          [(ngModel)]="selectedExecutorPerson"
+          [disabled]="!selectedExecutorPosition"
+          [style.opacity]="!selectedExecutorPosition ? '0.7' : '1'"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let person of getPeople(selectedExecutorPosition)" [value]="person.id">
+            {{ person.name }} | <b>{{ person.id }}</b>
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-cancel" (click)="closePopup()">Đóng</button>
+      <button class="btn-confirm" (click)="confirmExecutor()">Xác nhận</button>
+    </div>
+  </div>
+
+  <div class="popup-container executor-approver" id="popup-approver" *ngIf="isPopupApproverVisible">
+    <div class="popup-header">
+      <h3>DUYỆT BỞI</h3>
+    </div>
+    <div class="popup-content">
+      <p class="update-info" *ngIf="approverJobNames.length > 1" [title]="approverJobNames.join(', ')">
+        Bạn đang cập nhật cho
+        <span class="job-count">{{ approverJobNames.length }}</span>
+        công việc
+      </p>
+      <p class="update-info" *ngIf="approverJobNames.length === 1">
+        Bạn đang cập nhật cho công việc
+        <span class="job-name-single">{{ approverJobNames[0] }}</span>
+      </p>
+      <div class="form-group">
+        <label for="approver-position">Chức danh duyệt</label>
+        <select
+          id="approver-position"
+          [(ngModel)]="selectedApproverPosition"
+          [ngClass]="{ 'placeholder-selected': !approverTouched && !selectedApproverPosition }"
+          (change)="onReasonChange('approver')"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let pos of allowedApproverPositions" [value]="pos.name">
+            {{ pos.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="approver-person">Duyệt bởi</label>
+        <select
+          id="approver-person"
+          [(ngModel)]="selectedApproverPerson"
+          [disabled]="!selectedApproverPosition"
+          [style.opacity]="!selectedApproverPosition ? '0.7' : '1'"
+        >
+          <option value="">-- Chọn --</option>
+          <option *ngFor="let person of getPeople(selectedApproverPosition)" [value]="person.id">
+            {{ person.name }} | <b>{{ person.id }}</b>
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-cancel" (click)="closePopup()">Đóng</button>
+      <button class="btn-confirm" (click)="confirmApprover()">Xác nhận</button>
+    </div>
+  </div>
+</div>

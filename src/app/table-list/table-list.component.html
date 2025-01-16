@@ -1,0 +1,198 @@
+<div class="action-bar" *ngIf="selectedJobs.length > 0">
+  <div class="action-buttons">
+    <div class="action-count">
+      <span>{{ selectedJobs.length }}</span>
+      <span>Đã chọn</span>
+    </div>
+    <button *ngIf="visibleButtons.showNoAction && tableType === 'pre-Offboarding'" (click)="bulkNoAction()">
+      <img src="../../assets/ban.png" alt="" />
+      <span>Không thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showStopAction && tableType === 'Offboarding'" (click)="bulkStopAction()">
+      <img src="../../assets/ban.png" alt="" />
+      <span>Ngưng thực hiện</span>
+    </button>
+    <button *ngIf="visibleButtons.showDelete && tableType === 'pre-Offboarding'" class="delete-btn" (click)="bulkDelete()">
+      <img src="../../assets/trash.png" alt="" />
+      <span>Xóa công việc</span>
+    </button>
+    <button *ngIf="visibleButtons.showReopen" (click)="bulkReopen()">
+      <img src="../../assets/circle_arrow.png" alt="" />
+      <span>Mở lại</span>
+    </button>
+    <button *ngIf="visibleButtons.showSubmit && tableType === 'Offboarding'" (click)="bulkSubmit()">
+      <img src="../../assets/send.png" alt="" />
+      <span>Gửi duyệt</span>
+    </button>
+    <button *ngIf="visibleButtons.showApprove && tableType === 'Offboarding'" (click)="bulkApprove()">
+      <img src="../../assets/done.png" alt="" />
+      <span>Duyệt</span>
+    </button>
+    <button *ngIf="tableType === 'Offboarding'" (click)="bulkOffboard()">
+      <img src="../../assets/offboarded.png" alt="" />
+      <span>Offboarded</span>
+    </button>
+    <img src="../../assets/partition.png" alt="" />
+    <button (click)="bulkExecutor()">
+      <img src="../../assets/human.png" alt="" />
+      <span>Thực hiện bởi</span>
+    </button>
+    <button (click)="bulkApprover()">
+      <img src="../../assets/approve.png" alt="" />
+      <span>Duyệt bởi</span>
+    </button>
+    <img src="../../assets/partition.png" alt="" />
+    <button (click)="closeActionBar()">
+      <img src="../../assets/close.png" alt="" />
+    </button>
+  </div>
+</div>
+
+<div class="table-container">
+  <div class="table-list">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="allSelected" [disabled]="disabled" />
+          </th>
+          <th>Tên công việc</th>
+          <th>Mô tả</th>
+          <th (click)="sortTable('AssigneeName')">
+            <div class="header-content">
+              Thực hiện bởi
+              <img src="../../assets/arrow-long-up.png" alt="Sort" class="sort-icon"
+                   [ngClass]="{'asc': sortField === 'AssigneeName' && sortDirection === 'asc', 'desc': sortField === 'AssigneeName' && sortDirection === 'desc'}" />
+            </div>
+          </th>
+          <th (click)="sortTable('ApprovedName')">
+            <div class="header-content">
+              Duyệt bởi
+              <img src="../../assets/arrow-long-up.png" alt="Sort" class="sort-icon"
+                   [ngClass]="{'asc': sortField === 'ApprovedName' && sortDirection === 'asc', 'desc': sortField === 'ApprovedName' && sortDirection === 'desc'}" />
+            </div>
+          </th>
+          <th (click)="sortTable('OrderBy')">
+            <div class="header-content">
+              Thứ tự
+              <img src="../../assets/arrow-long-up.png" alt="Sort" class="sort-icon" [ngClass]="{'asc': sortField === 'OrderBy' && sortDirection === 'asc', 'desc': sortField === 'OrderBy' && sortDirection === 'desc'}" />
+            </div>
+          </th>
+          <th (click)="sortTable('EndDate')">
+            <div class="header-content">
+              Thời gian thực hiện
+              <img src="../../assets/arrow-long-up.png" alt="Sort" class="sort-icon" [ngClass]="{'asc': sortField === 'EndDate' && sortDirection === 'asc', 'desc': sortField === 'EndDate' && sortDirection === 'desc'}" />
+            </div>
+          </th>
+          <th>Tình trạng</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let job of filteredJobs; let i = index">
+          <tr [ngClass]="[getStatusClass(job.Status), isSelected(job) ? 'selected-row' : '']">
+            <td>
+              <input type="checkbox" [checked]="isSelected(job)" (change)="toggleSelectItem(job)" [disabled]="disabled" />
+            </td>
+            <td>
+              <p class="job-name">{{ job.TaskName }}</p>
+              <p class="details">
+                Ngoài chính sách 
+                <span
+                  *ngIf="!isOverdue(job) && getRemainingDays(job.EndDate) > 0"
+                  [style.color]="getRemainingDays(job.EndDate) | overdueDaysColor"
+                >
+                  | Còn hạn: {{ getRemainingDays(job.EndDate) }} ngày
+                </span>
+              </p>
+            </td>
+            <td>{{ job.Description }}</td>
+            <td>
+              {{ job.AssigneeName }}
+              <p class="details-gray">{{ job.AssigneePositionName }}</p>
+            </td>
+            <td>
+              {{ job.ApprovedName }}
+              <p class="details-gray">{{ job.ApprovedPositionName }}</p>
+            </td>
+            <td>{{ job.OrderBy }}</td>
+            <td>
+              <div>
+                <ng-container *ngIf="isOverdue(job); else normalEndDate">
+                  <img src="../../assets/warning.png" alt="Warning" class="warning-icon" />
+                  Hết ngày: <span class="due-date" style="color: #EB273A">{{ job.EndDate }}</span>
+                </ng-container>
+                <ng-template #normalEndDate>
+                  Hết ngày: {{ job.EndDate }}
+                </ng-template>
+              </div>
+              <div *ngIf="job.SentDate">
+                Gửi duyệt: <span [ngStyle]="{'color': isSentOverdue(job.SentDate) ? '#EB273A' : 'black'}">{{ job.SentDate }}</span>
+              </div>
+              <div *ngIf="job.Status === JobStatus.HOAN_TAT && job.CompletedDate">
+                Hoàn tất: {{ job.CompletedDate }}
+              </div>
+              <div *ngIf="job.Status === JobStatus.NGUNG_THUC_HIEN && job.StoppedDate">
+                Dừng ngày: {{ job.StoppedDate }}
+              </div>
+              <div *ngIf="job.Status === JobStatus.KHONG_THUC_HIEN && job.NotExecutedDate">
+                Không thực hiện: {{ job.NotExecutedDate }}
+              </div>
+            </td>
+            <td [style.color]="job.Status | statusColor: tableType">
+              {{ jobStatusService.getStatus(tableType, job.Status) }}
+            </td>
+            <td>
+              <ng-container *ngFor="let icon of jobIconService.getIcons(tableType, +job.Status); let idx = index">
+                <img [src]="icon" alt="Icon" class="status-icon" (click)="onStatusIconClick($event, job, idx)" style="cursor: pointer;" />
+              </ng-container>
+            </td>
+            <td class="action-cell">
+              <img src="../../assets/three-dots.png" alt="Actions" class="actions" (click)="toggleActionMenu(job, i)" [class.disabled]="disabled" />
+              <div class="action-menu" *ngIf="activeActionMenuId === 'item-' + i + '-' + job.TaskName">
+                <ul>
+                  <li *ngFor="let action of getActions(job.Status)" (click)="performAction(action, job)">
+                    <img [src]="jobIconService.getIconsByAction(action)" />
+                    {{ action }}
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="filteredJobs.length === 0">
+          <td colspan="10" class="no-data">Không có dữ liệu hiển thị</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-popup-action #popupAction [tableType]="tableType" (statusUpdated)="handleStatusUpdate($event)"></app-popup-action>
+
+<app-popup-comfirm *ngIf="showPopupConfirm && confirmActionType === 'delete'" [jobNames]="selectedJobNames" [actionType]="'delete'" (confirmAction)="onConfirmDelete()" (cancelAction)="onCancelDelete()"></app-popup-comfirm>
+
+<app-popup-comfirm *ngIf="showPopupConfirm && confirmActionType === 'submit'" [jobNames]="selectedJobNames" [actionType]="'submit'" (confirmAction)="onConfirmSubmit()" (cancelAction)="onCancelSubmit()"></app-popup-comfirm>
+
+<app-popup-comfirm *ngIf="showPopupConfirm && confirmActionType === 'approve'" [jobNames]="selectedJobNames" [actionType]="'approve'" (confirmAction)="onConfirmApproval()" (cancelAction)="onCancelApproval()"></app-popup-comfirm>
+
+<app-popup-comfirm *ngIf="showPopupConfirm && confirmActionType === 'stop'" 
+  [jobNames]="selectedJobNames" 
+  [actionType]="'stop'" 
+  (confirmAction)="onConfirmStop()" 
+  (cancelAction)="onCancelStop()">
+</app-popup-comfirm>
+
+<app-drawer-detail 
+  *ngIf="drawerVisible" 
+  [headerText]="drawerMode === 'edit' ? 'THÔNG TIN CÔNG VIỆC' : 'THÔNG TIN CÔNG VIỆC'" 
+  [mode]="drawerMode" 
+  [job]="selectedJobForDrawer" 
+  [employees]="employees" 
+  [positions]="positions" 
+  [tableType]="tableType"
+  [isNew]="isNewJob" 
+  (closeDrawer)="drawerVisible = false" 
+  (saveDrawer)="onSaveDrawer($event)">
+</app-drawer-detail>

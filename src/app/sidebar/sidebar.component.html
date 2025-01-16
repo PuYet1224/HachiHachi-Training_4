@@ -1,0 +1,61 @@
+<div id="sidebar-container">
+  <div class="icon-container">
+    <img src="../../assets/HachiLogo.svg" alt="" />
+    <img src="../../assets/chevron-up-solid.svg"
+         alt=""
+         style="cursor: pointer;"
+         [style.transform]="isEvaluationOpen ? 'rotate(0deg)' : 'rotate(180deg)'"
+         (click)="toggleEvaluation()"/>
+  </div>
+  
+  <div class="topic">
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>CƠ CẤU TỔ CHỨC</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>HỒ SƠ NHÂN SỰ</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>CHÍNH SÁCH</h1>
+    </div>
+
+    <div class="option"
+         *ngIf="isEvaluationOpen"
+         [class.open]="isEvaluationSubmenuOpen"
+         (click)="toggleEvaluationSubmenu()">
+      <div></div>
+      <img src="../../assets/copy.png" alt="" class="icon-bars"/>
+      <h1>OFFBOARD</h1>
+    </div>
+
+    <ul class="evaluation-list"
+        *ngIf="isEvaluationOpen && isEvaluationSubmenuOpen">
+      <li
+        [class.selected]="selectedEvaluation === 'prepare'"
+        (click)="selectEvaluation('prepare')">
+        Chuẩn bị Offboarding
+      </li>
+      <li
+        [class.selected]="selectedEvaluation === 'offboarding'"
+        (click)="selectEvaluation('offboarding')">
+        Offboarding
+      </li>
+      <li
+        [class.selected]="selectedEvaluation === 'offboarded'"
+        (click)="selectEvaluation('offboarded')">
+        Offboarded
+      </li>
+    </ul>
+  </div>
+</div>

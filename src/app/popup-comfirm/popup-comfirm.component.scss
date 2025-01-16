@@ -1,0 +1,258 @@
+@import "src/styles";
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.modal {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 316px;
+  height: 243px;
+  box-shadow: 0 10px 15px rgba(90, 98, 118, 0.5);
+  font-family: $primary-font;
+  border-radius: 8px;
+  transition: width 0.3s, height 0.3s;
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.235);
+
+    .warning-icon {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) saturate(100%) invert(22%) sepia(91%) saturate(7485%)
+        hue-rotate(356deg) brightness(95%) contrast(104%);
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #fd7676;
+    }
+  }
+
+  .modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+
+    .action-text {
+      font-size: 13px;
+      margin: 0;
+      color: #36c8cf;
+    }
+
+    .warning-text {
+      color: black;
+      margin-top: 10px;
+      font-size: 13px;
+
+      strong {
+        color: #fd7676;
+        font-weight: normal;
+      }
+    }
+
+    .employee-text {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 13px;
+      color: #333;
+      font-weight: 400;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    height: 53px;
+    border-top: 1px solid #eee;
+
+    .cancel-btn,
+    .delete-btn,
+    .approve-btn,
+    .submit-btn {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      cursor: pointer;
+      font-family: $primary-font;
+      font-size: 11px;
+      font-weight: bold;
+      transition: background 0.3s;
+      height: 100%;
+    }
+
+    .cancel-btn {
+      background: #e0e0e0;
+      color: #333;
+      border-right: 1px solid #eee;
+
+      &:hover {
+        background: #d5d5d5;
+      }
+    }
+
+    .delete-btn {
+      background: #fd7676;
+      color: white;
+
+      .icon-trash {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+
+      &:hover {
+        background: darken(#fd7676, 10%);
+      }
+    }
+
+    .approve-btn {
+      background: #1a6634;
+      color: white;
+
+      &:hover {
+        background: darken(#1a6634, 10%);
+      }
+    }
+
+    .submit-btn {
+      background: #1a6634;
+      color: white;
+
+      &:hover {
+        background: darken(#1a6634, 10%);
+      }
+    }
+  }
+
+  &.approve,
+  &.submit {
+    width: 428px;
+    height: 263px;
+
+    .modal-header {
+      color: #1a6634;
+      justify-content: center;
+
+      .header-title {
+        color: #1a6634;
+      }
+    }
+
+    .modal-body {
+      .action-text {
+        color: #333;
+      }
+
+      .warning-text {
+        color: #333;
+
+        strong {
+          color: #333;
+        }
+      }
+    }
+
+    .modal-actions {
+      .approve-btn,
+      .submit-btn {
+        background: #1a6634;
+        color: white;
+
+        &:hover {
+          background: darken(#1a6634, 10%);
+        }
+      }
+    }
+  }
+
+  &.delete {
+    width: 316px;
+    height: 243px;
+
+    .modal-header {
+      color: #fd7676;
+      justify-content: center;
+
+      .header-title {
+        color: #fd7676;
+      }
+    }
+
+    .modal-body {
+      .warning-text {
+        color: black;
+
+        strong {
+          color: #fd7676;
+          font-weight: normal;
+        }
+      }
+    }
+
+    .modal-actions {
+      height: 53px;
+
+      .delete-btn {
+        background: #fd7676;
+        color: white;
+
+        .icon-trash {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+        }
+
+        &:hover {
+          background: darken(#fd7676, 10%);
+        }
+      }
+
+      .cancel-btn {
+        height: 53px;
+      }
+    }
+  }
+}
+
+.submit-btn {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-family: "Mulish", sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  transition: background 0.3s;
+  position: relative;
+  background: #1A6634;
+  color: #fff;
+
+  &:hover {
+    background: darken(#1A6634, 10%);
+  }
+}

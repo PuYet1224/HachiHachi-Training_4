@@ -1,0 +1,235 @@
+$drawer-width: 420px;
+$drawer-bg: #ffffff;
+$overlay-bg: rgba(0, 0, 0, 0.5);
+$primary-color: #1a6634;
+$secondary-color: #343a40;
+$input-border: #ddd;
+$button-hover-bg: darken($primary-color, 10%);
+$scrollbar-thumb: #008000;
+$scrollbar-track: #e0e0e0;
+$font-family: "Mulish", sans-serif;
+$transition-duration: 0.3s;
+
+.drawer-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $overlay-bg;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  z-index: 1000;
+}
+
+.drawer-container {
+  background: $drawer-bg;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-family: $font-family;
+  font-size: 13px;
+  width: $drawer-width;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+  transform: translateX(0);
+  transition: transform $transition-duration ease-in-out;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb;
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $scrollbar-track;
+  }
+  
+  h3 {
+    font-size: 13px;
+    color: $secondary-color;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    
+    i {
+      margin-right: 10px;
+      color: $primary-color;
+    }
+    &:after {
+      content: '';
+      display: block;
+      width: calc(100% + 40px);
+      height: 1px;
+      background-color: #000;
+      position: absolute;
+      bottom: -8px;
+      left: -20px;
+    }
+  }
+  
+  form {
+    flex: 1;
+    
+    div {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: $secondary-color;
+      }
+      
+      input,
+      textarea,
+      select {
+        padding: 10px 12px;
+        border: 2px solid #DBDEE7;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color $transition-duration;
+        background-color: #fff;
+        
+        &:focus {
+          border-color: $primary-color;
+          outline: none;
+        }
+        
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+      
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      
+      select {
+        height: 40px;
+      }
+    }
+
+    .drawer-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 3px;
+      margin-left: -8px;
+      
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        width: 129px;
+        height: 30px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: bold;
+        transition: background-color $transition-duration, box-shadow $transition-duration;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        
+        &:first-child {
+          background: #fff;
+          color: $primary-color;
+          &:hover {
+            background: #f0f0f0;
+          }
+        }
+        
+        &:last-child:not(:only-child) {
+          background: $primary-color;
+          color: #fff;
+          &:hover {
+            background: $button-hover-bg;
+          }
+        }
+      }
+    }
+  }
+}
+
+.policy-text {
+  position: absolute;
+  right: 10px;
+  font-size: 13px;
+  color: #959DB3;
+}
+
+.required {
+  color: #EB273A;
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.date-label {
+  display: flex;
+  align-items: center;
+}
+
+.date-input-container {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar-icon-btn {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  
+  &:disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+  
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+}
+
+input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+
+.date-input-container {
+  input[type="date"] {
+    padding-left: 30px !important;
+  }
+}
+.overdue-days {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #EB273A;
+  font-weight: bold;
+}

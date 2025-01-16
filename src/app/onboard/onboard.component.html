@@ -1,0 +1,16 @@
+<div class="app-onboard" [class.disabled]="disabled">
+  <div class="breadcrumb">
+    <span class="breadcrumb-item active">OFFBOARDING</span>
+    <span class="breadcrumb-divider">></span>
+    <span class="breadcrumb-item">{{ isOffboarding ? 'OFFBOARDING' : 'CHUẨN BỊ OFFBOARDING' }}</span>
+    <button 
+      class="Offboarding-btn" 
+      (click)="onToggleClick()" 
+      [disabled]="disabled || getInvalidJobsForOffboarding().length > 0">
+      <img src="../assets/off_button.png" alt="Off Button" class="icon-power" />
+      {{ isOffboarding ? 'OFFBOARDED' : 'OFFBOARDING' }}
+    </button>
+  </div>
+</div>
+
+<app-info-onboard [isOffboarding]="isOffboarding" [disabled]="disabled"></app-info-onboard>

@@ -1,0 +1,37 @@
+<div class="job-overview" [class.disabled]="disabled">
+  <h3>TỔNG QUAN CÔNG VIỆC</h3>
+  <div class="task-status">
+    <ng-container *ngIf="tableType === 'pre-Offboarding'">
+      <span (click)="onStatusClick(1)" class="status-item">
+        Chưa thực hiện:
+        <span class="number-color">{{ statusCounts[1] || 0 }}</span>
+      </span>
+      <span (click)="onStatusClick(2)" class="status-item">
+        Không thực hiện:
+        <span class="number-color">{{ statusCounts[2] || 0 }}</span>
+      </span>
+    </ng-container>
+    <ng-container *ngIf="tableType === 'Offboarding'">
+      <span (click)="onStatusClick(3)" class="status-item">
+        Đang thực hiện:
+        <span class="number-color">{{ statusCounts[3] || 0 }}</span>
+      </span>
+      <span (click)="onStatusClick(4)" class="status-item">
+        Hoàn tất:
+        <span class="number-color">{{ statusCounts[4] || 0 }}</span>
+      </span>
+      <span (click)="onStatusClick(2)" class="status-item">
+        Không thực hiện:
+        <span class="number-color">{{ statusCounts[2] || 0 }}</span>
+      </span>
+      <span (click)="onStatusClick(5)" class="status-item">
+        Ngưng thực hiện:
+        <span class="number-color">{{ statusCounts[5] || 0 }}</span>
+      </span>
+      <span (click)="onStatusClick(6)" class="status-item">
+        Chờ duyệt:
+        <span class="number-color">{{ statusCounts[6] || 0 }}</span>
+      </span>
+    </ng-container>
+  </div>
+</div>

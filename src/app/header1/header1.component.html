@@ -1,0 +1,73 @@
+<div id="Header1">
+    <div class="left-h">
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(1)" 
+        [ngClass]="{'active': isHyphenActive(1)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(2)" 
+        [ngClass]="{'active': isHyphenActive(2)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(3)" 
+        [ngClass]="{'active': isHyphenActive(3)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(4)" 
+        [ngClass]="{'active': isHyphenActive(4)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(5)" 
+        [ngClass]="{'active': isHyphenActive(5)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <div 
+        class="hyphen-line" 
+        (click)="onHyphenLineClick(6)" 
+        [ngClass]="{'active': isHyphenActive(6)}"
+      >
+        ------------
+      </div>
+      <span class="vertical-line">|</span>
+      <a 
+        class="ns" 
+        (click)="onNhanSuClick()" 
+        [ngClass]="{'active': isNhanSuActive()}"
+      >
+        NHÂN SỰ
+      </a>
+    </div>
+    <div class="right-h">
+      <div>
+        <img src="../../assets/glass.png" alt="" />
+      </div>
+      <div class="notification">
+        <a>15</a>
+        <img src="../../assets/bell.png" alt="" />
+      </div>
+      <div class="user">
+        <a></a>
+        <img src="../../assets/avatar.png" alt="" />
+      </div>
+    </div>
+  </div>
+  

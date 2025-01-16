@@ -1,0 +1,263 @@
+@import "src/styles";
+
+$popup-colors: (
+  'reason': #F1802E,
+  'stop': #D82C12,
+  'reopen': #F1802E,
+  'executor-approver': #1A6634,
+  'other': #6A1B9A
+);
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  font-family: $primary-font;
+}
+
+.popup-container {
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 365px; 
+  max-width: 25%; 
+  width: 100%; 
+  padding: 0;
+  position: relative;
+  font-family: $primary-font;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+
+  &.executor-approver {
+    height: 365px;
+    max-width: 35%;
+  }
+}
+
+.popup-header {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 8px 16px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $primary-font !important;
+}
+
+#popup-reason .popup-header {
+  background-color: #F1802E;
+}
+
+#popup-stop .popup-header {
+  background-color: #D82C12;
+}
+
+#popup-reopen .popup-header {
+  background-color: #F1802E;
+}
+
+.executor-approver .popup-header {
+  background-color: #1A6634;
+}
+
+.popup-content {
+  flex: 1;
+  margin: 16px;
+  font-family: $primary-font;
+  color: #333;
+  overflow-y: auto;
+}
+
+.update-info {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.job-count {
+  color: #0D99FF;
+}
+
+.job-name-single {
+  color: #0D99FF;
+}
+
+.form-group {
+  margin-bottom: 12px;
+  font-family: $primary-font;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+  font-family: $primary-font;
+  color: #5A6276;
+  font-weight: bold;
+}
+
+.form-group .required {
+  color: red;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: $primary-font !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, color 0.3s ease;
+  background-color: #fff;
+}
+
+.form-group select.placeholder-selected {
+  color: #999;
+}
+
+.form-group select:not(.placeholder-selected) {
+  color: #333;
+}
+
+.form-group select option[value=""] {
+  color: #999;
+}
+
+.form-group select option:not([value=""]) {
+  color: #333;
+}
+
+.form-group select option:hover {
+  background-color: #1A6634; 
+  color: #ffffff; 
+}
+
+.form-group select:hover,
+.form-group input:hover {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.description {
+  display: block;
+  font-size: 14px;
+  color: #333;
+
+  &::after {
+    content: '*';
+    color: red;
+    margin-left: 4px;
+    display: none;
+  }
+
+  &.required::after {
+    display: inline;
+  }
+}
+
+.popup-content .highlighted {
+  font-weight: bold;
+  color: #007bff;
+  font-family: $primary-font;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 16px;
+  font-family: $primary-font;
+}
+
+.btn-cancel {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: $primary-font;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+.btn-confirm {
+  background: #ff6600;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: $primary-font;
+  
+  &:hover {
+    background: darken(map-get($popup-colors, 'reason'), 10%);
+  }
+}
+
+#popup-stop .btn-confirm {
+  background: #D82C12;
+
+  &:hover {
+    background: darken(#D82C12, 10%);
+  }
+}
+
+#popup-reopen .btn-confirm {
+  background: #F1802E;
+
+  &:hover {
+    background: darken(#F1802E, 10%);
+  }
+}
+
+.executor-approver .btn-confirm {
+  background: #1A6634;
+
+  &:hover {
+    background: darken(#1A6634, 10%);
+  }
+}
+
+#popup-other .btn-confirm {
+  background: #6A1B9A;
+
+  &:hover {
+    background: darken(#6A1B9A, 10%);
+  }
+}
+
+.btn-confirm:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+
+  &:hover {
+    background: #ccc;
+  }
+}
+
+.executor-approver {
+  .popup-content {
+    margin: 16px;
+  }
+}
